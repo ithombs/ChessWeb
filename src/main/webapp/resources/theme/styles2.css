@@ -1,0 +1,133 @@
+@CHARSET "ISO-8859-1";
+
+body
+{
+	background-color: #dad9d2;
+	background-image: url("halftone.png");
+	background-repeat: repeat
+}
+
+/*Top NavBar*/
+#topBarContainer
+{
+	display:none;
+	height:100px; 
+	width:800px; 
+	border:1px solid; 
+	margin:auto; 
+	background-color:cyan;
+	border-radius: 5px;
+	background-image: url("green_cup.png");
+	background-repeat: repeat;
+	transition: background 1.0s ease-in;
+}
+
+#optionsContainer
+{
+	height:50px;
+	width:800px;
+	border:1px solid;
+	margin:10px auto;
+	display:none;
+	text-align: center;
+}
+
+/*Main button divs*/
+.optionDivs
+{
+	height:30px;
+	width:90px;
+	border:1px solid;
+	margin:9px;
+	
+	display:inline-block;
+	transition: all .1s linear;
+}
+/*button click animations */
+.optionDivs:active
+{
+	/*
+	height: 500px;
+	*/
+}
+
+.optionBtnText
+{
+	text-align: center; 
+	line-height: 20%;
+}
+
+#menuContainer
+{
+	height:50px; 
+	margin: 50px auto auto auto; 
+	background-color:grey;
+	border-radius: 5px;
+}
+
+
+/*Main Container*/
+#mainContainer
+{
+	display:none;
+	width:800px; 
+	border:1px solid; 
+	margin: 50px auto;
+	background-color:#fbfae9;
+	overflow: auto;
+	border-radius: 5px;
+}
+
+
+/*Nav Menu*/
+#mainMenuBar
+{
+	height: 50px;
+	background-color: grey;
+	margin:auto auto auto auto;
+	padding:0;
+	background-image: url("confectionary.png");
+	background-repeat: repeat;
+}
+
+.mainMenuItem
+{
+	padding:0px;
+	margin: auto auto auto auto;
+	height:50px;
+	width:150px;
+	
+	white-space: nowrap;
+	
+	list-style-type:none;
+	border:1px solid;
+	float:left;
+	text-align:center;
+	
+	border-top-style: none;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: none;
+	
+	-moz-transition: all .2s ease-in;
+	-webkit-transition: all .2s ease-in;
+	transition: all .2s ease-in;
+}
+
+.mainMenuItem:hover
+{
+	background: #e0e0e0;
+	cursor:pointer;
+}
+
+.optionDivs:hover
+{
+	background: #e0e0e0;
+	cursor:pointer;
+}
+
+#topBarContainer:hover
+{
+	color
+}
+/*END of NavBar */

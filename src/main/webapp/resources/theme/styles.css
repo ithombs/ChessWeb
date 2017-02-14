@@ -1,0 +1,325 @@
+@CHARSET "ISO-8859-1";
+
+body
+{
+	background-color: #dad9d2;
+	background-image: url("halftone.png");
+	background-repeat: repeat
+}
+
+/*Top NavBar*/
+#topBarContainer
+{
+	height:100px; 
+	width:1000px; 
+	border:1px solid; 
+	margin:auto; 
+	background-color:cyan;
+	border-radius: 5px;
+	background-image: url("green_cup.png");
+	background-repeat: repeat;
+}
+
+#menuContainer
+{
+	height:50px; 
+	margin: 50px auto auto auto; 
+	background-color:grey;
+	border-radius: 5px;
+}
+
+#username
+{
+
+}
+
+#password
+{
+
+}
+
+#loginButton
+{
+
+}
+
+#loginTable
+{
+	margin: auto;
+	float:right;
+}
+
+#logoutTable
+{
+	margin: auto;
+	float:right;
+}
+
+/*Main Container*/
+#mainContainer
+{
+	width:1000px; 
+	border:1px solid; 
+	margin: 50px auto;
+	background-color:#fbfae9;
+	overflow: auto;
+	border-radius: 5px;
+}
+
+#title
+{
+	text-align: center;
+}
+
+#errorMessage
+{
+	color: red;
+	margin: auto auto auto auto;
+	padding: 0;
+}
+
+/*Nav Menu*/
+#mainMenuBar
+{
+	height: 50px;
+	background-color: grey;
+	margin:auto auto auto auto;
+	padding:0;
+	background-image: url("confectionary.png");
+	background-repeat: repeat;
+}
+
+.mainMenuItem
+{
+	padding:0px;
+	margin: auto auto auto auto;
+	height:50px;
+	width:150px;
+	
+	white-space: nowrap;
+	
+	list-style-type:none;
+	border:1px solid;
+	float:left;
+	text-align:center;
+	
+	border-top-style: none;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: none;
+	
+	-moz-transition: all .2s ease-in;
+	-webkit-transition: all .2s ease-in;
+	transition: all .2s ease-in;
+}
+
+.mainMenuItem:hover
+{
+	background: #e0e0e0;
+	cursor:pointer;
+	
+}
+/*END of NavBar */
+
+
+/*Misc elements*/
+#accountOptions
+{
+	height:400px;
+	width:250px;
+	border:1px solid;
+	margin:10px auto 10px auto;
+	text-align:center;
+}
+
+
+
+#statsBox1
+{
+	margin:auto auto 25px auto;
+
+	
+	height:400px;
+	width:400px;
+	display:table;
+}
+
+#statsTable table
+{
+	margin:0 auto;
+	border-top:1px solid;
+
+	text-align: center;
+}
+
+#statsTable th
+{
+	text-align: center;
+	border-right: 1px solid; 
+	border-left: 1px solid;
+	border-top: 1px solid;
+}
+
+#statsTable td
+{
+	text-align: center;
+	border-bottom: 1px solid;
+	border-right: 1px solid; 
+	border-left: 1px solid;
+	margin-bottom:10px;
+}
+
+#oppSelect
+{
+	margin:0 auto;
+}
+
+#queueBtn
+{
+	margin:0px 0 0 0;
+	
+}
+
+#ReconnectBtn
+{
+	margin:0px auto;
+}
+
+#concedeBtn
+{
+	margin:0 auto;
+}
+
+#opponentName
+{
+	float:right;
+}
+
+#timer
+{
+	text-align:center;
+	margin: 5px auto 5px;
+	width: 150px;
+}
+
+#gameButtons
+{
+	
+	height:200px;
+	width:150px;
+	float:right;
+	margin:auto;
+	position:relative;
+}
+
+#compLevels
+{
+	display: none;
+}
+
+#playAI
+{
+	display:none;
+}
+
+#moveListContainer
+{
+	height:500px;
+	width: 100px;
+	border: 1px solid;
+	overflow:auto;
+	float:left;
+	margin: auto auto auto 3px;
+	background-color: #B0B09C;
+}
+
+#moveList
+{
+	text-align:center;
+	
+}
+
+#moveListTitle
+{
+	text-align:center;
+	text-decoration:underline;
+}
+
+.whiteMove
+{
+	color:white;
+}
+
+.blackMove
+{
+	color:black;
+}
+
+#gameReplayIDs
+{
+	float:right;
+	
+}
+
+.center
+{
+	text-align: center;
+}
+
+#replayOptions
+{
+	
+	height:200px;
+	width:200px;
+	float:right;
+	margin:auto;
+}
+
+#replayBack
+{
+	float:right;
+}
+
+#replayForward
+{
+	float:right;
+}
+
+#adminCreationBox
+{
+	height:160px;
+	width:500px;
+	border:1px solid;
+	margin:auto 50px 10px 10px;
+	float:left;
+}
+
+#adminCreationSuccess
+{
+	margin:5px 10px 5px auto;
+	font-weight: bold;
+	text-align:center;
+}
+
+#liveStatsBox
+{
+	height:160px;
+	width:200px;
+	border:1px solid;
+	margin-right:10px;
+	
+	float:right;
+}
+#leaderboard
+{
+	border: 1px solid;
+	margin:0 auto 10px;;
+	text-align:center;
+}
+
+
+
+.darkTile
+{
+	background-color: #B0B09C;
+}
