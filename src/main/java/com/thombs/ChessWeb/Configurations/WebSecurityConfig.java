@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	http
 	    	.authorizeRequests()
-	    	.antMatchers("/profile").authenticated()
+	    	.antMatchers("/profile", "/playChess").authenticated()
 	        .antMatchers("/**").permitAll()
 	        .and()
 	    .formLogin()
@@ -41,6 +43,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .and()
 	    .logout()
 	        .permitAll();
+    	
+    	http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
+    }
+    
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
     
     @Bean(name="authenticationManager")

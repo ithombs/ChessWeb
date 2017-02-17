@@ -134,10 +134,13 @@ public class User {
 	@Override
 	public String toString(){
 		String lineBreak = System.getProperty("line.separator");
+		if(username == null || username.equals("")){
+			return "anonymousUser";
+		}
 		
 		return "UserID: " + this.userID + lineBreak +
 				"Username: " + this.username + lineBreak +
 				"Password: " + this.password + lineBreak + 
-				"Roles : " + this.getAllRoles();
+				this.roles!= null && this.roles.size() > 0?"Roles : " + this.getAllRoles():"Roles: none";
 	}
 }

@@ -843,3 +843,32 @@ function mute()
 		document.getElementById("mute").innerHTML = "Mute";
 	
 }
+
+var stompClient;
+function stompWebSockets(){
+	var socket = new SockJS('/ChessWeb/chessEndpoint');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame){
+		stompClient.subscribe('/topic/msg', function (msg) {
+	        alert(msg);
+	    });
+		
+		stompClient.subscribe('/user/queue/privMsg', function (msg) {
+	        alert(msg);
+	    });
+		
+		//For Chess AI matches
+		stompClient.subscribe('/user/queue/chessMsg', function (msg) {
+	        alert(msg);
+	    });
+	});
+}
+
+function testMsg(){
+	stompClient.send("/chess/message", {}, "{msg:From the client!}");
+}
+
+function testMsgPriv(){
+	stompClient.send("/chess/privMessage", {}, "{msg:From the client!}");
+	
+}

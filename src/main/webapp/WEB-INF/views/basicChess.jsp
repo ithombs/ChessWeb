@@ -7,6 +7,8 @@
 
 <link href="<c:url value="/resources/theme/styles.css" />" rel="stylesheet">
 <script type="text/javascript" src="<c:url value="/resources/javascript/chess.js" />"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.1/sockjs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Basic Chess</title>

@@ -53,8 +53,6 @@ public class HomeController {
 	@Autowired
     private UserValidator userValidator;
 	
-	@Autowired
-    private AuthenticationManager authenticationManager;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
