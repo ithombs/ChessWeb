@@ -44,10 +44,15 @@ public class ChessController {
 		simp.convertAndSendToUser(username, "/queue/privMsg", "{msg: Private message from the server!}");
 	}
 	
+	@MessageMapping("/chessPong")
+	public void recievePong(SimpMessageHeaderAccessor headerAccessor){
+		Principal user = headerAccessor.getUser();
+		chessMM.recievePong(user.getName());
+	}
+	
 	@MessageMapping("/chessMsg")
 	public void chessMove(SimpMessageHeaderAccessor headerAccessor){
 		Principal user = headerAccessor.getUser();
-		
 		
 	}
 }

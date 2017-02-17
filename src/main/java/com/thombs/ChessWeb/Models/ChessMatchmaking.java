@@ -3,9 +3,12 @@ package com.thombs.ChessWeb.Models;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +29,22 @@ public class ChessMatchmaking {
 	private static final Logger log = LoggerFactory.getLogger(ChessMatchmaking.class);
 	
 	@Autowired
-	SimpMessagingTemplate msgTemplate;
+	private SimpMessagingTemplate msgTemplate;
 	
-	private final Queue<String> playerPool;
-	//private final Map<String, ChessBoard> games;
+	private Queue<String> playerPool;
+	private Map<String, Long> playerPingRecord;
+	private Map<String, ChessBoard> activeGames;
+	private final String chessMsgDestination = "/queue/chessMsg";
 	
 	public ChessMatchmaking(){
 		log.info("ChessMatchaker created! - " + this.hashCode());
 		
 		playerPool = new LinkedList<String>();
+		activeGames = new HashMap<String, ChessBoard>();
+		playerPingRecord = new HashMap<String, Long>();
 		//games = new HashMap<String, ChessBoard>();
 	}
-	
+
 	public void addPlayerToPool(String username){
 		if(!playerPool.contains(username)){
 			playerPool.add(username);
@@ -48,78 +55,48 @@ public class ChessMatchmaking {
 		playerPool.remove(username);
 	}
 	
+	
 	public boolean findMatch(){
-    	boolean foundMatch = false;
-    	
-    	while(players.hasNext())
-    	{
-    		//WebSocketSession s = players.next();
-    		//String status = (String)s.getAttributes().get("status");
-    		if(!searchingPlayer.getAttributes().get("username").equals(s.getAttributes().get("username")))
-    		{
-    			String user, opponent;
-    			s.getAttributes().put("status", "inGame");
-    			searchingPlayer.getAttributes().put("status", "inGame");
-    			
-    			user = (String)searchingPlayer.getAttributes().get("username");
-    			opponent = (String)s.getAttributes().get("username");
-    			log.info("User: "  +user + " --- Opponent: " + opponent);
-    			
-    			try
-    			{
-    				Random r = new Random();
-    				if(r.nextInt(2) == 0)
-    				{
-    					s.getAttributes().put("side", Side.WHITE);
-    					searchingPlayer.getAttributes().put("side", Side.BLACK);
-    				}
-    				else
-    				{
-    					s.getAttributes().put("side", Side.BLACK);
-    					searchingPlayer.getAttributes().put("side", Side.WHITE);
-    				}
+    	//boolean foundMatch = false;
+    	String player1, player2;
+    	if(playerPool.size() > 1){
+    		
+    		player1 = playerPool.remove();
+    		player2 = playerPool.remove();
+    	}else{
+    		return false;
+    	}
+		
+		log.info("User: "  +player1 + " --- Opponent: " + player2);
+		
 
-    				//put opponents into each others map
-    				searchingPlayer.getAttributes().put("opponent", opponent);
-    				s.getAttributes().put("opponent", user);
-    				
-    				//Send to the client that they connected to a match
-    				s.sendMessage(new TextMessage("connnected"));
-    				searchingPlayer.sendMessage(new TextMessage("connected") );
-    				
-    				//Send opponent name and SIDE
-    				searchingPlayer.sendMessage(new TextMessage("opponent:"+ opponent));
-    				searchingPlayer.sendMessage(new TextMessage("side:" + searchingPlayer.getAttributes().get("side").toString()));
-    				s.sendMessage(new TextMessage("opponent:"+ user));
-    				s.sendMessage(new TextMessage("side:" + s.getAttributes().get("side").toString()));
-    			}
-    			catch(Exception e)
-    			{
-    				log.info("Error finding opponent for Chess game: " + e.getMessage());
-    			}
-    			//this.removePlayerFromPool(user);
-    			this.removePlayerFromPool(opponent);
-    			foundMatch = true;
-    			break;
-    		}
-    	}
-    	
-    	if(!foundMatch){
-    		this.addPlayerToPool(searchingPlayer);
-    	}
+		ChessBoard game = new ChessBoard(player1, player2);
+
+		//Send to the client that they connected to a match
+		//TODO: Replace multiple send calls with one block of actual JSON data
+		msgTemplate.convertAndSendToUser(player1, chessMsgDestination, "{'msg': 'connected'}");
+		msgTemplate.convertAndSendToUser(player2, chessMsgDestination, "{'msg': 'connected'}");
+		
+		//Send opponent name and SIDE
+		msgTemplate.convertAndSendToUser(player1, chessMsgDestination, "{'opponent': '" + player2 +"'}");
+		msgTemplate.convertAndSendToUser(player2, chessMsgDestination, "{'opponent': '" + player1 +"'}");
+		
+		msgTemplate.convertAndSendToUser(player1, chessMsgDestination, "{'side': '" + (game.getPlayerTurn().equals(player1)?"white":"black") +"'}");
+		msgTemplate.convertAndSendToUser(player2, chessMsgDestination, "{'side': '" + (game.getPlayerTurn().equals(player2)?"white":"black") +"'}");
+		
+		activeGames.put(player1, game);
+		activeGames.put(player2, game);
+		return true;
+	}
+	
+	public void recievePong(String username){
+		long currentTime = System.currentTimeMillis();
+		playerPingRecord.put(username, currentTime);
 	}
 	
 	@Scheduled(fixedDelay = 10000)
-	public void purgePlayers(){
-		Iterator<String> playerNames = playerPool.keySet().iterator();
-		//log.info("---Purging player pool---");
-		while(playerNames.hasNext()){
-			String player = playerNames.next();
-			WebSocketSession wsSession = playerPool.get(player);
-			if(!wsSession.isOpen()){
-				log.info("Removing disconnected player - " + player);
-				playerPool.remove(player);
-			}
-		}
+	public void pingPlayers(){
+		playerPool.forEach(player -> msgTemplate.convertAndSendToUser(player, "/queue/chessPing", "{'msg':'ping'}"));
+		activeGames.forEach((player, game) -> msgTemplate.convertAndSendToUser(player, "/queue/chessPing", "{'msg':'ping'}"));
 	}
 }

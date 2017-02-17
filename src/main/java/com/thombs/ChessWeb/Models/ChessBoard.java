@@ -2,6 +2,7 @@ package com.thombs.ChessWeb.Models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 
 /* ---Notes---
@@ -16,6 +17,9 @@ public class ChessBoard {
 	private ArrayList<ChessPiece> moveList;
 	private Side turn;
 	private boolean gameOver;
+	private String player1;
+	private String player2;
+	private String playerTurn;
 	
 	public ChessBoard()
 	{
@@ -24,6 +28,53 @@ public class ChessBoard {
 		turn = Side.WHITE;
 		gameOver = false;
 		initBoard();
+	}
+	
+	public ChessBoard(String player1, String player2)
+	{
+		board = new ChessPiece[32];
+		moveList = new ArrayList<ChessPiece>();
+		turn = Side.WHITE;
+		gameOver = false;
+		initBoard();
+		
+		this.player1 = player1;
+		this.player2 = player2;
+		
+		setRandomPlayerColors();
+	}
+	
+	private void setRandomPlayerColors(){
+		Random r = new Random();
+		if(r.nextInt(2) == 0){
+			this.playerTurn = this.player1;
+		}else{
+			this.playerTurn = this.player2;
+		}
+	}
+	
+	private void setWhitePlayer(String whiteSidePlayer){
+		this.playerTurn = whiteSidePlayer;
+	}
+	
+	public String getPlayerTurn(){
+		return this.playerTurn;
+	}
+	
+	public String getPlayer1(){
+		return this.player1;
+	}
+	
+	public void setPlayer1(String username){
+		this.player1 = username;
+	}
+	
+	public String getPlayer2(){
+		return this.player2;
+	}
+	
+	public void setPlayer2(String username){
+		this.player2 = username;
 	}
 	
 	public ArrayList<ChessPiece> getMoveList()
@@ -1417,6 +1468,12 @@ public class ChessBoard {
 				turn = Side.WHITE;
 			else
 				turn = Side.BLACK;
+			
+			if(playerTurn.equals(player1)){
+				playerTurn = player2;
+			}else{
+				playerTurn = player1;
+			}
 			
 			return true;
 		}
