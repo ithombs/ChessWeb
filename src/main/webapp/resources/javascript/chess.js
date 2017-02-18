@@ -21,39 +21,77 @@ var side;
 var color = true;
 var isMuted = false;
 
-function connect(option) {
+var stompClient;
+function initStompChannels(){
+	var socket = new SockJS('/ChessWeb/chessEndpoint');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame){
+		stompClient.subscribe('/topic/msg', function (msg) {
+	        alert(msg);
+	    });
+		
+		stompClient.subscribe('/user/queue/chessMsg', function (msg) {
+	        //alert(msg);
+	        //console.log(msg);
+	        msg = JSON.parse(msg.body);
+	        if(msg.chessCommand == "gameStart"){
+	        	startGame(msg);
+	        }else if(msg.chessCommand == "move"){
+	        	if(msg.error != null){
+	        		movePiece(msg.pieceID, msg.row + "|" + msg.col, false);
+	        	}else{
+	        		movePiece(msg.pieceID, msg.row + "|" + msg.col, true);
+	        		if(msg.ml1 != null){
+	        			tileFrom = document.getElementById(msg.ml1).title;
+		        		tileTo = document.getElementById(msg.ml2).title;
+		        		if(color == true)
+			        		document.getElementById("moveList").innerHTML += "<span class='whiteMove'>" + tileFrom + " - " + tileTo + "</span><br>";
+			        	else
+			        		document.getElementById("moveList").innerHTML += "<span class='blackMove'>" + tileFrom + " - " + tileTo + "</span><br>";
+			        	color = !color;
+	        		}
+	        	}
+	        }else if(msg.chessCommand == "gameOver"){
+	        	console.log(msg.winner + " has won the game!")
+	        	document.getElementById("title").innerHTML = msg.winner + " has won the game!";
+	        	document.getElementById("queueBtn").disabled = false;
+	        }
+	    });
+		
+		//For Chess AI matches
+		stompClient.subscribe('/user/queue/chessPing', function (msg) {
+			console.log(msg);
+	        stompClient.send("/chess/chessPong", {}, "{pong:'pong'}");
+	    });
+	});
+}
+
+function startGame(msgBody){
+	clearInterval(timerVar);
+	document.getElementById("title").innerHTML = "Opponent: " + msgBody.opponent;
+	document.getElementById("side").innerHTML = "You are " + msgBody.side;
+	
+	chessGameStarted();
+	initPieces();
+}
+
+function enterQueue(type, level){
+	var json = new Object();
+	json.chessCommand = "enterQueue";
+	json.type = type;
+	json.level = level;
+	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json))
+}
+
+function connect() {
+	
+	initStompChannels();
+	
+	
 	if ('WebSocket' in window){
 		  console.log('Websocket supported');
 		  console.log('Connection attempted');
-
-		  socket.onopen = function(){
-			   console.log('Connection open!');
-			   
-			   if(option == "normal")
-			   {
-				   if(userName == "")
-						userName = "guest";
-				   if(reconn == false)
-					    socket.send("connect:" + userName);
-				   else
-				   {
-					   console.log("attempting reconnection...");
-					   socket.send("recon:" + userName);
-					   reconn = false;
-				   }
-				   console.log(userName);
-			   }
-			   else if(option == "computer")
-			   {
-				   console.log("VS AI");
-			   }
-			   
-				
-			}
-
-		  socket.onclose = function(){
-			  console.log('Disconnected');
-			  }
+		 
 
 		  socket.onmessage = function (evt) 
 		     { 
@@ -171,7 +209,7 @@ function queueTimer()
 
 
 //Enter queue to play a game of chess. Send the UserName from the JSP page.
-function enterQueue(userN)
+function enterQueue2(userN)
 {
 	removePieces();
 	socket = new WebSocket('ws://localhost:8080/WebSocks/test1');
@@ -206,13 +244,8 @@ function vsAI(level)
 //-This function is used when a move is received from the Web Socket connection
 function movePiece(piece, tile, goodMove)
 {
-	//console.log(piece.toString());
 	var p = document.getElementById(piece);
 	var t = document.getElementById(tile);
-	//console.log(p);
-	//console.log(p.id + " moved to " + t.id);
-	//tileFrom = p.parentElement.title;
-	//tileTo = t.title;
 	
 	//If the move is to take another piece, the piece being taken needs to be removed from the children
 	if(t.children.length > 0 && t.children[0] != p)
@@ -223,22 +256,12 @@ function movePiece(piece, tile, goodMove)
 	}
 	else
 	{
-		//t.insertBefore(p, t.children[0]);
 		t.appendChild(p);
 	}	
 	
 	checkPawnPromotion(p);
 	
-	//document.getElementById("moveList").innerHTML += ""
-	if(goodMove == true)
-	{
-		//if(selfMove == true)
-			//console.log(test+ " - " + tileTo);
-		//else
-			//console.log(tileFrom+ " - " + tileTo);
-	}
-	soundMove();
-	
+	//soundMove();
 }
 function checkPawnPromotion(piece)
 {
@@ -265,7 +288,14 @@ function checkPawnPromotion(piece)
 //Send the player's move to the server for validation
 function sendMove()
 {
-	socket.send(moveFrom +"|"+ moveTo);
+	//socket.send(moveFrom +"|"+ moveTo);
+	var jsonMove = new Object();
+	jsonMove.chessCommand = "move";
+	jsonMove.pieceID = moveFrom;
+	jsonMove.row = moveTo.split("|")[0];
+	jsonMove.col = moveTo.split("|")[1];
+	
+	stompClient.send("/chess/chessMsg", {}, JSON.stringify(jsonMove));
 }
 
 //drag and drop event function
@@ -844,7 +874,8 @@ function mute()
 	
 }
 
-var stompClient;
+
+
 function stompWebSockets(){
 	var socket = new SockJS('/ChessWeb/chessEndpoint');
 	stompClient = Stomp.over(socket);
@@ -855,13 +886,25 @@ function stompWebSockets(){
 		
 		stompClient.subscribe('/user/queue/privMsg', function (msg) {
 	        alert(msg);
+	        
 	    });
 		
-		//For Chess AI matches
+		//For Chess messages
 		stompClient.subscribe('/user/queue/chessMsg', function (msg) {
 	        alert(msg);
 	    });
+		
+		checkGameStatus();
 	});
+}
+
+//Check if a game was in progress and reconnect to it if there was
+function checkGameStatus(){
+	var jsonMsg = new Object();
+	jsonMsg.chessCommand = "recon";
+	console.log(JSON.stringify(jsonMsg));
+	
+	stompClient.send("/chess/chessMsg", {}, JSON.stringify(jsonMsg));
 }
 
 function testMsg(){

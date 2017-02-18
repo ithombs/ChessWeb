@@ -2,6 +2,7 @@ package com.thombs.ChessWeb.Controllers;
 
 import java.security.Principal;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,40 @@ public class ChessController {
 	public void recievePong(SimpMessageHeaderAccessor headerAccessor){
 		Principal user = headerAccessor.getUser();
 		chessMM.recievePong(user.getName());
+		//logger.info("Recieved ChessPong from [" + user.getName() +"]");
 	}
 	
 	@MessageMapping("/chessMsg")
-	public void chessMove(SimpMessageHeaderAccessor headerAccessor){
+	public void chessMove(SimpMessageHeaderAccessor headerAccessor, String jsonMsg){
 		Principal user = headerAccessor.getUser();
+		//JSONObject json = new JSONObject();
+		//json.put("chessCommand", "gameStart");
+		//json.put("opponent", "dummyUser1");
+		//json.put("side", "White");
 		
+		JSONObject recievedJSON = new JSONObject(jsonMsg);
+		String commandType = recievedJSON.getString("chessCommand");
+		switch(commandType){
+			case "enterQueue":
+				logger.info("ChessCommand [enterQueue] recieved from " + user.getName() + ": " + jsonMsg);
+				if(recievedJSON.getString("type").equals("human")){
+					chessMM.addPlayerToPool(user.getName());
+				}else if(recievedJSON.getString("type").equals("AI")){
+					chessMM.createAiGame(user.getName(), recievedJSON.getInt("level"));
+				}
+				break;
+			case "move":
+				logger.info("ChessCommand [move] recieved from " + user.getName() + ": " + jsonMsg);
+				chessMM.makeMove(user.getName(), jsonMsg);
+				break;
+			case "reconnect":
+				logger.info("ChessCommand [reconnect] recieved from " + user.getName() + ": " + jsonMsg);
+				break;
+			default:
+				logger.info("Unknown ChessCommand recieved from " + user.getName() + ": " + jsonMsg);
+		}
+		
+		//logger.info(jsonMsg);
+		//simp.convertAndSendToUser(user.getName(), "/queue/chessMsg", json.toString());
 	}
 }

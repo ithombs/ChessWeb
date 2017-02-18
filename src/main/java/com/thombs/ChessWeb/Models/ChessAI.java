@@ -3,6 +3,7 @@ package com.thombs.ChessWeb.Models;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.json.JSONObject;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.socket.TextMessage;
 
@@ -96,12 +97,16 @@ public class ChessAI implements Runnable{
 		try
 		{
 			//ChessPiece p = board.getPiece(aiMove.getID());
-			String jsonMove = "'move':'" +aiMove.getID() + "|" + aiMove.getRow() + "|" + aiMove.getCol() + "'";
-			String jsonML1 = "'ml1':'" + prevR+ "|" + prevC + "'";
-			String jsonML2 = "'ml2':'" + aiMove.getRow()+ "|" + aiMove.getCol() + "'";
-			String jsonPayload = "{"+ jsonMove + "," + jsonML1 + "," + jsonML2  +"}";
+			JSONObject json = new JSONObject();
+			json.put("chessCommand", "move");
+			json.put("pieceID", aiMove.getID());
+			json.put("row", aiMove.getRow());
+			json.put("col", aiMove.getCol());
+			json.put("ml1", prevR + "|" + prevC);
+			json.put("ml2", aiMove.getRow() + "|" + aiMove.getCol());
 			
-			msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", jsonPayload);
+			
+			msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", json.toString());
 			//s.sendMessage(new TextMessage("move:" +aiMove.getID() + "|" + aiMove.getRow() + "|" + aiMove.getCol()));
 			//send move to move list
 			//s.sendMessage(new TextMessage("ml1:" + prevR+ "|" + prevC));

@@ -20,6 +20,7 @@ public class ChessBoard {
 	private String player1;
 	private String player2;
 	private String playerTurn;
+	private int aiLevel;
 	
 	public ChessBoard()
 	{
@@ -44,6 +45,21 @@ public class ChessBoard {
 		setRandomPlayerColors();
 	}
 	
+	public ChessBoard(String player1, int level)
+	{
+		board = new ChessPiece[32];
+		moveList = new ArrayList<ChessPiece>();
+		turn = Side.WHITE;
+		gameOver = false;
+		initBoard();
+		
+		this.player1 = player1;
+		this.player2 = "AI";
+		this.aiLevel = level;
+		
+		setRandomPlayerColors();
+	}
+	
 	private void setRandomPlayerColors(){
 		Random r = new Random();
 		if(r.nextInt(2) == 0){
@@ -51,6 +67,14 @@ public class ChessBoard {
 		}else{
 			this.playerTurn = this.player2;
 		}
+	}
+	
+	public void setAiLevel(int level){
+		aiLevel = level;
+	}
+	
+	public int getAiLevel(){
+		return aiLevel;
 	}
 	
 	private void setWhitePlayer(String whiteSidePlayer){
