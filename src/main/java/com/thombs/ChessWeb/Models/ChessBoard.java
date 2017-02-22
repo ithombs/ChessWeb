@@ -19,6 +19,8 @@ public class ChessBoard {
 	private boolean gameOver;
 	private String player1;
 	private String player2;
+	private String playerWhite;
+	private String playerBlack;
 	private String playerTurn;
 	private int aiLevel;
 	
@@ -64,8 +66,12 @@ public class ChessBoard {
 		Random r = new Random();
 		if(r.nextInt(2) == 0){
 			this.playerTurn = this.player1;
+			this.playerWhite = this.player1;
+			this.playerBlack = this.player2;
 		}else{
 			this.playerTurn = this.player2;
+			this.playerWhite = this.player2;
+			this.playerBlack = this.player1;
 		}
 	}
 	
@@ -77,8 +83,20 @@ public class ChessBoard {
 		return aiLevel;
 	}
 	
-	private void setWhitePlayer(String whiteSidePlayer){
-		this.playerTurn = whiteSidePlayer;
+	public String getPlayerWhite(){
+		return this.getPlayerWhite();
+	}
+	
+	public void setPlayerWhite(String username){
+		this.playerWhite = username;
+	}
+	
+	public String getPlayerBlack(){
+		return this.getPlayerBlack();
+	}
+	
+	public void setPlayerBlack(String username){
+		this.playerBlack = username;
 	}
 	
 	public String getPlayerTurn(){
@@ -476,6 +494,27 @@ public class ChessBoard {
 		}
 		
 		return goodMoves;
+	}
+	
+	//If the opposing side does not have a valid move then the game is over and checkmate is declared
+	public boolean isCheckmate(){
+		boolean checkmate = false;
+		
+		if(turn.equals(Side.BLACK)){
+			if(getPossibleMoves(Side.WHITE).size() > 0){
+				checkmate = false;
+			}else{
+				checkmate = true;
+			}
+		}else{
+			if(getPossibleMoves(Side.BLACK).size() > 0){
+				checkmate = false;
+			}else{
+				checkmate = true;
+			}
+		}
+		
+		return checkmate;
 	}
 	
 	//This method will fill a list with valid moves of a given piece
@@ -1078,10 +1117,12 @@ public class ChessBoard {
 		return intercepted;
 	}
 	//Method to move a piece after it has been sent from the client
-	//TODO: check all possible moves for each piece type
-	//DONE: Pawn basic forward movement checks
 	public boolean move(ChessPiece c, boolean actualMove)
 	{
+		if(gameOver){
+			return false;
+		}
+		
 		boolean validMove = false;
 		boolean canAttack = false;
 		ChessPiece p = isOccupied2(c.getRow(), c.getCol());
@@ -1486,19 +1527,21 @@ public class ChessBoard {
 				return false;
 			}
 			
-			
-			//Change the turn over upon successfully completing a move
-			if(turn == Side.BLACK)
-				turn = Side.WHITE;
-			else
-				turn = Side.BLACK;
-			
-			if(playerTurn.equals(player1)){
-				playerTurn = player2;
-			}else{
-				playerTurn = player1;
+			//Check if the move ended the game
+			gameOver = isCheckmate();
+			if(!gameOver){
+				//Change the turn over upon successfully completing a move
+				if(turn == Side.BLACK)
+					turn = Side.WHITE;
+				else
+					turn = Side.BLACK;
+				
+				if(playerTurn.equals(player1)){
+					playerTurn = player2;
+				}else{
+					playerTurn = player1;
+				}
 			}
-			
 			return true;
 		}
 		else
@@ -1506,5 +1549,4 @@ public class ChessBoard {
 			return false;
 		}
 	}
-
 }

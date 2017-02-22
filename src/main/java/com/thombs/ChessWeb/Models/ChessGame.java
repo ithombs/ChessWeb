@@ -1,6 +1,7 @@
 package com.thombs.ChessWeb.Models;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -12,6 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
+
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -27,13 +31,13 @@ public class ChessGame {
 	private Timestamp gameDate;
 	
 	@Column(name = "playerblack")
-	private int playerBlack;
+	private long playerBlack;
 	
 	@Column(name = "playerwhite")
-	private int playerWhite;
+	private long playerWhite;
 	
 	@Column(name = "winner")
-	private int winner;
+	private long winner;
 	
 	@ElementCollection(fetch=FetchType.EAGER)
 	@CollectionTable(name = "chess_move_list", joinColumns = @JoinColumn(name="gameid"))
@@ -41,6 +45,22 @@ public class ChessGame {
 	
 	public ChessGame(){
 		
+	}
+	
+	public ChessGame(ChessBoard game, long white, long black){
+		this.setGameDate(new Timestamp(System.currentTimeMillis()));
+		this.playerBlack = black;
+		this.playerWhite = white;
+		this.moves = new ArrayList<ChessMove>();
+		
+		int x = 1;
+		for(ChessPiece piece : game.getMoveList()){
+			ChessMove move = new ChessMove();
+			move.setMoveNum(x);
+			move.setMove(new JSONObject().put("chessCommand", "move").put("pieceID", piece.getID()).put("row", piece.getRow()).put("col", piece.getCol()).toString());
+			moves.add(move);
+			x++;
+		}
 	}
 
 	public int getGameID() {
@@ -67,27 +87,27 @@ public class ChessGame {
 		this.gameDate = gameDate;
 	}
 
-	public int getPlayerBlack() {
+	public long getPlayerBlack() {
 		return playerBlack;
 	}
 
-	public void setPlayerBlack(int playerBlack) {
+	public void setPlayerBlack(long playerBlack) {
 		this.playerBlack = playerBlack;
 	}
 
-	public int getPlayerWhite() {
+	public long getPlayerWhite() {
 		return playerWhite;
 	}
 
-	public void setPlayerWhite(int playerWhite) {
+	public void setPlayerWhite(long playerWhite) {
 		this.playerWhite = playerWhite;
 	}
 
-	public int getWinner() {
+	public long getWinner() {
 		return winner;
 	}
 
-	public void setWinner(int winner) {
+	public void setWinner(long winner) {
 		this.winner = winner;
 	}
 	

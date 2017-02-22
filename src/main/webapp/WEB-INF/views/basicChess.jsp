@@ -55,11 +55,11 @@
 		<option value="3">Level 3</option>
 	</select>
 
-	<button type="button" id="queueBtn" onClick=enterQueue('human', 0)>Enter Queue</button>
+	<button type="button" id="queueBtn" onClick="enterQueue('human', 0)">Enter Queue</button>
 	<br/>	
 	
 	<button type="button" id="concedeBtn" onClick=concede()>Concede</button>
-	<button type="button" id="playAI" onClick=enterQueue('AI',compLevels.value)>Play</button>
+	<button type="button" id="playAI" onClick="enterQueue('AI',compLevels.value)">Play</button>
 </div>
 
 

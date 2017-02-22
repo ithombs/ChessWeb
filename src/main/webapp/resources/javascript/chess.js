@@ -87,7 +87,7 @@ function connect() {
 	
 	initStompChannels();
 	
-	
+	/*
 	if ('WebSocket' in window){
 		  console.log('Websocket supported');
 		  console.log('Connection attempted');
@@ -177,6 +177,7 @@ function connect() {
 		} else {
 		  console.log('Websocket not supported');
 		}
+	*/
 }
 
 function reconnect(userN)

@@ -14,17 +14,17 @@ public class ChessAI implements Runnable{
 	//WebSocketSession s;
 	String username;
 	SimpMessagingTemplate msgTemplate;
-	Thread t;
 	
 	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username)
 	{
 		difficulty = diff;
 		board = b;
-		//this.s = s;
 		this.msgTemplate = msgTemplate;
 		this.username = username;
-		
-		t = new Thread(this, "TestThread");
+	}
+	
+	public void makeMove(){
+		Thread t = new Thread(this, "AI move - " + username);
 		t.start();
 	}
 	
@@ -105,13 +105,13 @@ public class ChessAI implements Runnable{
 			json.put("ml1", prevR + "|" + prevC);
 			json.put("ml2", aiMove.getRow() + "|" + aiMove.getCol());
 			
-			
 			msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", json.toString());
-			//s.sendMessage(new TextMessage("move:" +aiMove.getID() + "|" + aiMove.getRow() + "|" + aiMove.getCol()));
-			//send move to move list
-			//s.sendMessage(new TextMessage("ml1:" + prevR+ "|" + prevC));
-			//s.sendMessage(new TextMessage("ml2:" + aiMove.getRow()+ "|" + aiMove.getCol()));
-			
+			if(board.isGameOver()){
+				JSONObject jsonGameOver = new JSONObject();
+				jsonGameOver.put("chessCommand", "gameOver");
+				jsonGameOver.put("winner", "AI");
+				msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", jsonGameOver.toString());
+			}
 		}
 		catch(Exception e)
 		{
@@ -296,8 +296,6 @@ public class ChessAI implements Runnable{
 				
 				if(beta >= alpha)
 					break;
-				
-				
 			}
 			return value;
 		}

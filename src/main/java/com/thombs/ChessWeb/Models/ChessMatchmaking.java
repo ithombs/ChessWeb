@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
 
@@ -36,7 +38,13 @@ public class ChessMatchmaking {
 	@Autowired
 	private SimpMessagingTemplate msgTemplate;
 	
-	private Queue<String> playerPool;
+	@Autowired
+	private ChessGameService chessService;
+	
+	@Autowired
+	private UserService userService;
+	
+	private BlockingQueue<String> playerPool;
 	private Map<String, Long> playerPingRecord;
 	private Map<String, ChessBoard> activeGames;
 	private final String chessMsgDestination = "/queue/chessMsg";
@@ -44,7 +52,7 @@ public class ChessMatchmaking {
 	public ChessMatchmaking(){
 		log.info("ChessMatchaker created! - " + this.hashCode());
 		
-		playerPool = new LinkedList<String>();
+		playerPool = new LinkedBlockingQueue<String>();
 		activeGames = new HashMap<String, ChessBoard>();
 		playerPingRecord = new HashMap<String, Long>();
 		//games = new HashMap<String, ChessBoard>();
@@ -75,6 +83,7 @@ public class ChessMatchmaking {
 		
 		if(aiGame.getPlayerTurn().equals("AI")){
 			ChessAI ai = new ChessAI(aiGame.getAiLevel(), aiGame, msgTemplate, username);
+			ai.makeMove();
 		}
 	}
 	
@@ -82,7 +91,6 @@ public class ChessMatchmaking {
     	//boolean foundMatch = false;
     	String player1, player2;
     	if(playerPool.size() > 1){
-    		
     		player1 = playerPool.remove();
     		player2 = playerPool.remove();
     	}else{
@@ -155,20 +163,24 @@ public class ChessMatchmaking {
 				if(opponent.equals("AI")){
         			msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonMoveSuccess.toString());
         			
-        			if(currentGame.getPossibleMoves(Side.WHITE).size() == 0 || currentGame.getPossibleMoves(Side.BLACK).size() == 0)
+        			if(currentGame.isGameOver())
         			{
         				JSONObject jsonGameOver = new JSONObject();
         				jsonGameOver.put("chessCommand", "gameOver");
         				jsonGameOver.put("winner", username);
         				msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonGameOver.toString());
+        				
+        				//TODO: Save the game to the database here
+        				saveChessGame(currentGame, username);
         			}else{
         				ChessAI ai = new ChessAI(currentGame.getAiLevel(), currentGame, msgTemplate, username);
+        				ai.makeMove();
         			}
 				}else{
 					msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonMoveSuccess.toString());
 					msgTemplate.convertAndSendToUser(opponent, chessMsgDestination, jsonMoveSuccess.toString());
 					
-					if(currentGame.getPossibleMoves(Side.WHITE).size() == 0 || currentGame.getPossibleMoves(Side.BLACK).size() == 0)
+					if(currentGame.isGameOver())
         			{
         				JSONObject jsonGameOver = new JSONObject();
         				jsonGameOver.put("chessCommand", "gameOver");
@@ -180,13 +192,43 @@ public class ChessMatchmaking {
 			}else{
 				JSONObject badMove = new JSONObject();
 				badMove.put("chessCommand", "move");
-				badMove.put("pieceID", pieceID);
-				badMove.put("row", row);
-				badMove.put("col", col);
+				badMove.put("pieceID", previousPos.getID());
+				badMove.put("row", previousPos.getRow());
+				badMove.put("col", previousPos.getCol());
 				badMove.put("error", "bad move");
 				
 				msgTemplate.convertAndSendToUser(username, chessMsgDestination, badMove.toString());
 			}
 		}
+	}
+	
+	private void saveChessGame(ChessBoard game, String winner){
+		ChessGame chessGame;
+		User white, black;
+		long winnerL;
+		
+		try{
+			winnerL = Long.parseLong(winner);
+		}catch(Exception e){
+			winnerL = -2;
+		}
+		
+		if(!game.getPlayerWhite().equals("AI")){
+			white = userService.getUser(game.getPlayerWhite());
+		}else{
+			white = new User();
+			white.setUserid(-1);
+		}
+		if(!game.getPlayerBlack().equals("AI")){
+			black = userService.getUser(game.getPlayerBlack());
+		}else{
+			black = new User();
+			black.setUserid(-1);
+		}
+		
+		chessGame = new ChessGame(game, white.getUserid(), black.getUserid());
+		chessGame.setWinner(winnerL);
+		
+		chessService.saveChessGame(chessGame);
 	}
 }
