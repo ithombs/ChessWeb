@@ -84,7 +84,7 @@ public class ChessBoard {
 	}
 	
 	public String getPlayerWhite(){
-		return this.getPlayerWhite();
+		return this.playerWhite;
 	}
 	
 	public void setPlayerWhite(String username){
@@ -92,7 +92,7 @@ public class ChessBoard {
 	}
 	
 	public String getPlayerBlack(){
-		return this.getPlayerBlack();
+		return this.playerBlack;
 	}
 	
 	public void setPlayerBlack(String username){
@@ -288,10 +288,10 @@ public class ChessBoard {
 	
 	//Terrible name, must rename it. This method looks for the Check state.
 	//@RETURNS TRUE if the side currently going is in CHECK.
-	private boolean checkCheck()
+	private boolean checkCheck(Side side)
 	{
 		int row, col;
-		if(turn == Side.BLACK)
+		if(side == Side.BLACK)
 		{
 			row = board[4].getRow();
 			col = board[4].getCol();
@@ -501,15 +501,13 @@ public class ChessBoard {
 		boolean checkmate = false;
 		
 		if(turn.equals(Side.BLACK)){
-			if(getPossibleMoves(Side.WHITE).size() > 0){
-				checkmate = false;
-			}else{
+			int moves = this.getPossibleMoves(Side.WHITE).size();
+			if(moves == 0){
 				checkmate = true;
 			}
 		}else{
-			if(getPossibleMoves(Side.BLACK).size() > 0){
-				checkmate = false;
-			}else{
+			int moves = this.getPossibleMoves(Side.BLACK).size();
+			if(moves == 0){
 				checkmate = true;
 			}
 		}
@@ -527,7 +525,7 @@ public class ChessBoard {
 		//references suck! ChessPiece attributes cannot be changed or the copy in the list will change as well
 		if(c.getType() == PieceType.PAWN)
 		{
-			if(turn == Side.WHITE)
+			if(c.getSide() == Side.WHITE)
 			{
 				//Check forward movement 2 tiles
 				moveCheck.setRow(dummy.getRow() - 2);
@@ -1135,7 +1133,7 @@ public class ChessBoard {
 		if(c.getType() == PieceType.PAWN)
 		{
 			
-			if(turn == Side.WHITE)
+			if(c.getSide() == Side.WHITE)
 			{
 				//check for basic forward movement (single space movement) or a double move from starting position
 				//System.out.println("ChessBoard - Pawn Validation: basic forward movement WHITE.");
@@ -1165,7 +1163,7 @@ public class ChessBoard {
 						{
 							p = isOccupied2(c.getRow(), c.getCol());
 							
-							if(p != null && p.getSide() != Side.WHITE)
+							if(p != null && p.getSide() != c.getSide())
 							{
 								//p.setCaptured(true);
 								validMove = true;
@@ -1226,7 +1224,7 @@ public class ChessBoard {
 			//boolean intercepted = false;
 			//System.out.println("MOVE - ROOK VALIDATION");
 			//Check white side rook movements
-			if(turn == Side.WHITE)
+			if(c.getSide() == Side.WHITE)
 			{
 				//System.out.println("MOVE - ROOK VALIDATION - WHITE SIDE");
 				//Check lateral movement
@@ -1239,7 +1237,7 @@ public class ChessBoard {
 					
 					
 					//TODO: Refactor to remove the initial SIDE check as they are unnecessary
-					if(p != null && p.getSide() != Side.WHITE) //Attack move check
+					if(p != null && p.getSide() != c.getSide()) //Attack move check
 					{
 						if(!checkHorizontalMovement(c))
 						{
@@ -1261,7 +1259,7 @@ public class ChessBoard {
 				//white ROOK vertical move
 				else if(board[c.getID()].getCol() == c.getCol())
 				{
-					if(p != null && p.getSide() != Side.WHITE) //Attack move check
+					if(p != null && p.getSide() != c.getSide()) //Attack move check
 					{
 						if(!checkVerticalMovement(c))
 						{
@@ -1291,7 +1289,7 @@ public class ChessBoard {
 					//check every space in between the current column and the new location
 					
 					
-					if(p != null && p.getSide() != Side.BLACK) //Attack move check
+					if(p != null && p.getSide() != c.getSide()) //Attack move check
 					{
 						if(!checkHorizontalMovement(c))
 						{
@@ -1312,7 +1310,7 @@ public class ChessBoard {
 				//Black side ROOK vertical movements
 				else if(board[c.getID()].getCol() == c.getCol())
 				{
-					if(p != null && p.getSide() != Side.BLACK) //Attack move check
+					if(p != null && p.getSide() != c.getSide()) //Attack move check
 					{
 						if(!checkVerticalMovement(c))
 						{
@@ -1388,7 +1386,7 @@ public class ChessBoard {
 				
 				
 				//TODO: Refactor to remove the initial SIDE check as they are unnecessary
-				if(p != null && p.getSide() != turn) //Attack move check
+				if(p != null && p.getSide() != c.getSide()) //Attack move check
 				{
 					if(!checkHorizontalMovement(c))
 					{
@@ -1410,7 +1408,7 @@ public class ChessBoard {
 			//QUEEN vertical move
 			else if(board[c.getID()].getCol() == c.getCol())
 			{
-				if(p != null && p.getSide() != turn) //Attack move check
+				if(p != null && p.getSide() != c.getSide()) //Attack move check
 				{
 					if(!checkVerticalMovement(c))
 					{
@@ -1471,7 +1469,7 @@ public class ChessBoard {
 					validMove = true;
 					//board[c.getID()] = c;
 				}
-				else if(p != null && p.getSide() != turn)
+				else if(p != null && p.getSide() != c.getSide())
 				{
 					//p.setCaptured(true);
 					validMove = true;
@@ -1493,7 +1491,7 @@ public class ChessBoard {
 				p.setCaptured(true);
 			board[c.getID()] = c;
 			
-			if(checkCheck())
+			if(checkCheck(c.getSide()))
 			{
 				board[c.getID()] = previousP;
 				if(p != null)
@@ -1513,13 +1511,12 @@ public class ChessBoard {
 		//END OF MOVE CHECK
 		if(validMove == true)
 		{
-
 			if(p != null)
 				p.setCaptured(true);
 			board[c.getID()] = c;
 			pawnPromotion(c);
 			//Make sure the move doesn't put the player into Check
-			if(checkCheck())
+			if(checkCheck(c.getSide()))
 			{
 				board[c.getID()] = previousP;
 				if(p != null)
@@ -1529,18 +1526,16 @@ public class ChessBoard {
 			
 			//Check if the move ended the game
 			gameOver = isCheckmate();
-			if(!gameOver){
-				//Change the turn over upon successfully completing a move
-				if(turn == Side.BLACK)
-					turn = Side.WHITE;
-				else
-					turn = Side.BLACK;
-				
-				if(playerTurn.equals(player1)){
-					playerTurn = player2;
-				}else{
-					playerTurn = player1;
-				}
+			//Change the turn over upon successfully completing a move
+			if(turn == Side.BLACK)
+				turn = Side.WHITE;
+			else
+				turn = Side.BLACK;
+			
+			if(playerTurn.equals(player1)){
+				playerTurn = player2;
+			}else{
+				playerTurn = player1;
 			}
 			return true;
 		}
