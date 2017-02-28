@@ -94,13 +94,17 @@ public class ChessBoard {
 	public String getPlayerBlack(){
 		return this.playerBlack;
 	}
-	
+		
 	public void setPlayerBlack(String username){
 		this.playerBlack = username;
 	}
 	
 	public String getPlayerTurn(){
 		return this.playerTurn;
+	}
+	
+	public void setPlayerTurn(String playerTurn){
+		this.playerTurn = playerTurn;
 	}
 	
 	public String getPlayer1(){
@@ -129,28 +133,28 @@ public class ChessBoard {
 		return turn;
 	}
 	
+	/*
+	 * Deep copy of this ChessBoard
+	 */
 	public ChessBoard CopyChessBoard()
 	{
 		ChessBoard b = new ChessBoard();
 		
-		//set new attributes according to this board
-		//board array
 		ChessPiece array[] = new ChessPiece[32];
 		for(int i = 0; i < 32; i++)
 		{
 			array[i] = makeCopy(this.getPiece(i));
 		}
 		b.setBoard(array);
-		
-		//move list
 		b.setMoveList(new ArrayList<ChessPiece>(this.moveList));
-		
-		//current turn
 		b.setTurn(this.turn);
-		
-		//game over status
 		b.setGameOver(this.gameOver);
-		
+		b.setAiLevel(aiLevel);
+		b.setPlayer1(player1);
+		b.setPlayer2(player2);
+		b.setPlayerBlack(playerBlack);
+		b.setPlayerWhite(playerWhite);
+		b.setPlayerTurn(playerTurn);
 		
 		return b;
 	}

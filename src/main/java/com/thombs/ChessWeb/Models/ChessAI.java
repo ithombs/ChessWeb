@@ -1,6 +1,7 @@
 package com.thombs.ChessWeb.Models;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.json.JSONObject;
@@ -58,7 +59,7 @@ public class ChessAI implements Runnable{
 		//Alpha beta pruning depth 4
 		else if(difficulty == 1)
 		{		
-			aiMove = aiMove2(board, 2);
+			aiMove = aiMove1(board, 2);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -71,7 +72,7 @@ public class ChessAI implements Runnable{
 		//depth of 8
 		else if(difficulty == 2)
 		{
-			aiMove = aiMove2(board, 4);
+			aiMove = aiMove1(board, 4);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -83,7 +84,7 @@ public class ChessAI implements Runnable{
 		}
 		else if(difficulty == 3)
 		{
-			aiMove = aiMove2(board, 7);
+			aiMove = aiMove1(board, 7);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -143,19 +144,32 @@ public class ChessAI implements Runnable{
 	{
 		int pos = 0;
 		int num = -1;
+		List<ChessPiece> bestMoves = new ArrayList<ChessPiece>();
 		
 		for(ChessPiece cp: b.getPossibleMoves(b.getTurn()))
 		{
 			ChessBoard bb = b.CopyChessBoard();
 			bb.move(cp, true);
-			int value = alphaBeta(bb.CopyChessBoard(), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+			int value = alphaBeta(bb.CopyChessBoard(), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 			
-			if(value > num)
+			if(value > num){
 				num = pos;
+				bestMoves.clear();
+				bestMoves.add(b.getPossibleMoves(b.getTurn()).get(num));
+			}else if(value == num){
+				bestMoves.add(b.getPossibleMoves(b.getTurn()).get(pos));
+			}
 			pos++;
 		}
-		if(num > -1)
-			return b.getPossibleMoves(b.getTurn()).get(num);
+		
+		if(num > -1){
+			if(bestMoves.size() == 1){
+				return bestMoves.get(0);
+			}else{
+				Random r = new Random();
+				return bestMoves.get(r.nextInt(bestMoves.size() - 1));
+			}
+		}
 		else
 			return null;
 	}
@@ -165,143 +179,63 @@ public class ChessAI implements Runnable{
 		BestMove best = null;
 		
 		best = AB2(b, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+		
+		if(best.value == 0){
+			best.bestMove = randomMove(b.getPossibleMoves(b.getTurn()));
+		}
 		return best.bestMove;
 	}
 	
 	private int alphaBeta(ChessBoard b, int depth, int alpha, int beta, boolean computer)
 	{
-		/*
-		01 function alphabeta(node, depth, a, b, maximizingPlayer)
-		02      if depth = 0 or node is a terminal node
-		03          return the heuristic value of node
-		04      if maximizingPlayer
-		05          v := -inf
-		06          for each child of node
-		07              v := max(v, alphabeta(child, depth - 1, a, b, FALSE))
-		08              a := max(a, v)
-		09              if b <= a
-		10                  break (* b cut-off *)
-		11          return v
-		12      else
-		13          v := inf
-		14          for each child of node
-		15              v := min(v, alphabeta(child, depth - 1, a, b, TRUE))
-		16              b := min(b, v)
-		17              if b >= a
-		18                  break (* a cut-off *)
-		19          return v
-		*/
-		
-		// pawn = 1, knight = 3, bishop = 3, rook = 5, queen = 9
+		int bestVal;
 		if(depth == 0 || b.isGameOver())
 		{
 			if(b.isGameOver())
-				return Integer.MAX_VALUE - 1000;
-			
-			int hueristicValue = 0;
-			
-			for(ChessPiece c : b.getBoard())
 			{
-				if(c.isCaptured())
-					continue;
-				if(c.getSide() == b.getTurn())
-				{
-					if(c.getType() == PieceType.PAWN)
-					{
-						hueristicValue += 1;
-					}
-					else if(c.getType() == PieceType.KNIGHT)
-					{
-						hueristicValue += 3;
-					}
-					else if(c.getType() == PieceType.BISHOP)
-					{
-						hueristicValue += 3;
-					}
-					else if(c.getType() == PieceType.ROOK)
-					{
-						hueristicValue += 5;
-					}
-					else if(c.getType() == PieceType.QUEEN)
-					{
-						hueristicValue += 9;
-					}
-				}
-				else
-				{
-					if(c.getType() == PieceType.PAWN)
-					{
-						hueristicValue -= 1;
-					}
-					else if(c.getType() == PieceType.KNIGHT)
-					{
-						hueristicValue -= 3;
-					}
-					else if(c.getType() == PieceType.BISHOP)
-					{
-						hueristicValue -= 3;
-					}
-					else if(c.getType() == PieceType.ROOK)
-					{
-						hueristicValue -= 5;
-					}
-					else if(c.getType() == PieceType.QUEEN)
-					{
-						hueristicValue -= 9;
-					}
-				}
+				return Integer.MAX_VALUE - 1000;
+			}else{
+				return evaluateBoard(b);
 			}
-			
-			return hueristicValue;
 		}
 		
 		if(computer)
 		{
-			int value = Integer.MIN_VALUE;
+			bestVal = alpha;
 			
 			for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
 			{
 				ChessBoard newB = b.CopyChessBoard();
 				newB.move(c, true);
 				
-				int score = alphaBeta(newB, depth - 1, alpha, beta, false);
-				if(score > value)
-					value = score;
+				int score = alphaBeta(newB, depth - 1, bestVal, beta, false);
+				bestVal = Math.max(score, bestVal);
 				
-				if(value > alpha)
-					alpha = value;
-				
-				if(beta <= alpha)
+				if(beta <= bestVal)
 					break;
-				
-				
 			}
-			return value;
 		}
 		else
 		{
-			int value = Integer.MAX_VALUE;
+			bestVal = beta;
 			
 			for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
 			{
 				ChessBoard newB = b.CopyChessBoard();
 				newB.move(c, true);
 				
-				int v = alphaBeta(newB, depth - 1, alpha, beta, true);
-				if(v < value)
-					value = v;
+				int score = alphaBeta(newB, depth - 1, alpha, bestVal, true);
+				bestVal = Math.min(score, bestVal);
 				
-				if(value < beta)
-					beta = value;
-				
-				if(beta >= alpha)
+				if(bestVal <= alpha)
 					break;
 			}
-			return value;
 		}
+		
+		return bestVal;
 	}
 	
-	private int EvaluateBoard(ChessBoard b)
+	private int evaluateBoard(ChessBoard b)
 	{
 		int hueristicValue = 0;
 		
@@ -364,34 +298,33 @@ public class ChessAI implements Runnable{
 	{
 		if(depth == 0 || b.isGameOver())
 		{
-			return new BestMove(EvaluateBoard(b), null);
+			return new BestMove(evaluateBoard(b), null);
 		}
 		else
 		{
 			if(computer)
 			{
 				ChessPiece bestMove = null;
+				int bestVal = alpha;
 				for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
 				{
 					ChessBoard bb = b.CopyChessBoard();
 					bb.move(c, true);
 					BestMove bm = AB2(bb, depth - 1, alpha, beta, false);
-					//if(depth == 1)
-						//System.out.println("Depth: " + depth + " - BM = (" + bm.value + ", " + bm.bestMove + ")");
-					if(bm.value > alpha)
-					{
-						alpha = bm.value;
+					bm.value = Math.max(alpha, bm.value);
+				
+					if(beta <= bm.value){
+						break;
+					}else{
 						bestMove = c;
-						
-						if(alpha >= beta)
-							break;
-					}
+					}	
 				}
 				return new BestMove(alpha, bestMove);
 			}
 			else
 			{
 				ChessPiece bestMove = null;
+				int bestVal = beta;
 				for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
 				{
 					ChessBoard bb = b.CopyChessBoard();
@@ -401,11 +334,10 @@ public class ChessAI implements Runnable{
 					if(bm.value < beta)
 					{
 						beta = bm.value;
-						bestMove = c;
-						
-						if(alpha >= beta)
-							break;
 					}
+					bestMove = c;
+					if(alpha >= beta)
+						break;
 				}
 				return new BestMove(beta, bestMove);
 			}

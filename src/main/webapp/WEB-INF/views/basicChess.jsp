@@ -16,7 +16,7 @@
 <body>
 <script type="text/javascript"> 
 //Connect to the websocket server
-	//connect();
+	connect();
 </script>
 
 <div id="topBarContainer" style="height:100px; width:1000px; border:1px solid; margin:auto; background-color:cyan;">

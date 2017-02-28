@@ -12,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.thombs.ChessWeb.Models.ChessBoard;
 import com.thombs.ChessWeb.Models.ChessMatchmaking;
 
 @Controller
@@ -84,5 +85,10 @@ public class ChessController {
 		
 		//logger.info(jsonMsg);
 		//simp.convertAndSendToUser(user.getName(), "/queue/chessMsg", json.toString());
+	}
+	
+	@MessageMapping("/testAI")
+	public void testAI(SimpMessageHeaderAccessor headerAccessor, String jsonMsg){
+		ChessBoard testBoard = new ChessBoard();
 	}
 }
