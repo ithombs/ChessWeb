@@ -195,44 +195,44 @@ public class ChessBoard {
 		//ChessPiece(id, PieceType, Side, row, col)
 		
 		//Place back row black side(top of board)
-		board[0] = (new ChessPiece(0, PieceType.ROOK, Side.BLACK, 0, 0));
-		board[1] = (new ChessPiece(1, PieceType.KNIGHT, Side.BLACK, 0, 1));
-		board[2] = (new ChessPiece(2, PieceType.BISHOP, Side.BLACK, 0, 2));
-		board[3] = (new ChessPiece(3, PieceType.QUEEN, Side.BLACK, 0, 3));
-		board[4] = (new ChessPiece(4, PieceType.KING, Side.BLACK, 0, 4));
-		board[5] = (new ChessPiece(5, PieceType.BISHOP, Side.BLACK, 0, 5));
-		board[6] = (new ChessPiece(6, PieceType.KNIGHT, Side.BLACK, 0, 6));
-		board[7] = (new ChessPiece(7, PieceType.ROOK, Side.BLACK, 0, 7));
+		board[0] = (new ChessPiece(0, PieceType.ROOK, Side.BLACK, 0, 0, false));
+		board[1] = (new ChessPiece(1, PieceType.KNIGHT, Side.BLACK, 0, 1, false));
+		board[2] = (new ChessPiece(2, PieceType.BISHOP, Side.BLACK, 0, 2, false));
+		board[3] = (new ChessPiece(3, PieceType.QUEEN, Side.BLACK, 0, 3, false));
+		board[4] = (new ChessPiece(4, PieceType.KING, Side.BLACK, 0, 4, false));
+		board[5] = (new ChessPiece(5, PieceType.BISHOP, Side.BLACK, 0, 5, false));
+		board[6] = (new ChessPiece(6, PieceType.KNIGHT, Side.BLACK, 0, 6, false));
+		board[7] = (new ChessPiece(7, PieceType.ROOK, Side.BLACK, 0, 7, false));
 		
 		//Place front row black side
-		board[8] = (new ChessPiece(8, PieceType.PAWN, Side.BLACK, 1, 0));
-		board[9] = (new ChessPiece(9, PieceType.PAWN, Side.BLACK, 1, 1));
-		board[10] = (new ChessPiece(10, PieceType.PAWN, Side.BLACK, 1, 2));
-		board[11] = (new ChessPiece(11, PieceType.PAWN, Side.BLACK, 1, 3));
-		board[12] = (new ChessPiece(12, PieceType.PAWN, Side.BLACK, 1, 4));
-		board[13] = (new ChessPiece(13, PieceType.PAWN, Side.BLACK, 1, 5));
-		board[14] = (new ChessPiece(14, PieceType.PAWN, Side.BLACK, 1, 6));
-		board[15] = (new ChessPiece(15, PieceType.PAWN, Side.BLACK, 1, 7));
+		board[8] = (new ChessPiece(8, PieceType.PAWN, Side.BLACK, 1, 0, false));
+		board[9] = (new ChessPiece(9, PieceType.PAWN, Side.BLACK, 1, 1, false));
+		board[10] = (new ChessPiece(10, PieceType.PAWN, Side.BLACK, 1, 2, false));
+		board[11] = (new ChessPiece(11, PieceType.PAWN, Side.BLACK, 1, 3, false));
+		board[12] = (new ChessPiece(12, PieceType.PAWN, Side.BLACK, 1, 4, false));
+		board[13] = (new ChessPiece(13, PieceType.PAWN, Side.BLACK, 1, 5, false));
+		board[14] = (new ChessPiece(14, PieceType.PAWN, Side.BLACK, 1, 6, false));
+		board[15] = (new ChessPiece(15, PieceType.PAWN, Side.BLACK, 1, 7, false));
 		
 		//Place front row white side
-		board[16] = (new ChessPiece(16, PieceType.PAWN, Side.WHITE, 6, 0));
-		board[17] = (new ChessPiece(17, PieceType.PAWN, Side.WHITE, 6, 1));
-		board[18] = (new ChessPiece(18, PieceType.PAWN, Side.WHITE, 6, 2));
-		board[19] = (new ChessPiece(19, PieceType.PAWN, Side.WHITE, 6, 3));
-		board[20] = (new ChessPiece(20, PieceType.PAWN, Side.WHITE, 6, 4));
-		board[21] = (new ChessPiece(21, PieceType.PAWN, Side.WHITE, 6, 5));
-		board[22] = (new ChessPiece(22, PieceType.PAWN, Side.WHITE, 6, 6));
-		board[23] = (new ChessPiece(23, PieceType.PAWN, Side.WHITE, 6, 7));
+		board[16] = (new ChessPiece(16, PieceType.PAWN, Side.WHITE, 6, 0, false));
+		board[17] = (new ChessPiece(17, PieceType.PAWN, Side.WHITE, 6, 1, false));
+		board[18] = (new ChessPiece(18, PieceType.PAWN, Side.WHITE, 6, 2, false));
+		board[19] = (new ChessPiece(19, PieceType.PAWN, Side.WHITE, 6, 3, false));
+		board[20] = (new ChessPiece(20, PieceType.PAWN, Side.WHITE, 6, 4, false));
+		board[21] = (new ChessPiece(21, PieceType.PAWN, Side.WHITE, 6, 5, false));
+		board[22] = (new ChessPiece(22, PieceType.PAWN, Side.WHITE, 6, 6, false));
+		board[23] = (new ChessPiece(23, PieceType.PAWN, Side.WHITE, 6, 7, false));
 		
 		//Place back row white side
-		board[24] = (new ChessPiece(24, PieceType.ROOK, Side.WHITE, 7, 0));
-		board[25] = (new ChessPiece(25, PieceType.KNIGHT, Side.WHITE, 7, 1));
-		board[26] = (new ChessPiece(26, PieceType.BISHOP, Side.WHITE, 7, 2));
-		board[27] = (new ChessPiece(27, PieceType.QUEEN, Side.WHITE, 7, 3));
-		board[28] = (new ChessPiece(28, PieceType.KING, Side.WHITE, 7, 4));
-		board[29] = (new ChessPiece(29, PieceType.BISHOP, Side.WHITE, 7, 5));
-		board[30] = (new ChessPiece(30, PieceType.KNIGHT, Side.WHITE, 7, 6));
-		board[31] = (new ChessPiece(31, PieceType.ROOK, Side.WHITE, 7, 7));
+		board[24] = (new ChessPiece(24, PieceType.ROOK, Side.WHITE, 7, 0, false));
+		board[25] = (new ChessPiece(25, PieceType.KNIGHT, Side.WHITE, 7, 1, false));
+		board[26] = (new ChessPiece(26, PieceType.BISHOP, Side.WHITE, 7, 2, false));
+		board[27] = (new ChessPiece(27, PieceType.QUEEN, Side.WHITE, 7, 3, false));
+		board[28] = (new ChessPiece(28, PieceType.KING, Side.WHITE, 7, 4, false));
+		board[29] = (new ChessPiece(29, PieceType.BISHOP, Side.WHITE, 7, 5, false));
+		board[30] = (new ChessPiece(30, PieceType.KNIGHT, Side.WHITE, 7, 6, false));
+		board[31] = (new ChessPiece(31, PieceType.ROOK, Side.WHITE, 7, 7, false));
 	}
 	
 	
@@ -246,7 +246,7 @@ public class ChessBoard {
 		
 		//find piece that is being moved
 		//NOTE: a new ChessPiece is created due to the fact that setting p = board[id] and subsequently changing p's properties will effect the board piece.
-		p = new ChessPiece(id, board[id].getType(), board[id].getSide(), 0,0);
+		p = new ChessPiece(id, board[id].getType(), board[id].getSide(), 0,0, false);
 		//System.out.println("RECEIVE MOVE - Original Piece: "+ p.getType() + " " + p.getRow() + " " + p.getCol());
 		//If the player moved a valid piece then send it to the move method for additional validity checks
 		//This also makes sure the player moves their own piece
@@ -287,7 +287,7 @@ public class ChessBoard {
 	//Make a copy of a given piece
 	private ChessPiece makeCopy(ChessPiece c)
 	{
-		return new ChessPiece(c.getID(), c.getType(),c.getSide(), c.getRow(), c.getCol());
+		return new ChessPiece(c.getID(), c.getType(),c.getSide(), c.getRow(), c.getCol(), c.isCaptured());
 	}
 	
 	//Terrible name, must rename it. This method looks for the Check state.
@@ -310,13 +310,26 @@ public class ChessBoard {
 		
 	}
 	
+	public boolean isOpponentInCheck(){
+		int row, col;
+		if(this.turn == Side.BLACK){
+			row = board[4].getRow();
+			col = board[4].getCol();
+			return isThreatened(row, col, Side.BLACK);
+		}else{
+			row = board[28].getRow();
+			col = board[28].getCol();
+			return isThreatened(row, col, Side.WHITE);
+		}
+	}
+	
 	//Check if a tile is threatened
 	//Mock a move to the tile of the given coordinates from the parameters.
 	//@RETURNS TRUE if the space is threatened by any enemy piece.
 	private boolean isThreatened(int row, int col, Side s)
 	{
 		//create a dummy piece to check if it is threatened by any piece on the opposing side
-		ChessPiece dummy = new ChessPiece(-1, PieceType.KING, Side.BLACK, row, col);
+		ChessPiece dummy = new ChessPiece(-1, PieceType.KING, Side.BLACK, row, col, false);
 		
 
 			for(ChessPiece p : board)

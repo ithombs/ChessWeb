@@ -912,6 +912,10 @@ function testMsg(){
 	stompClient.send("/chess/message", {}, "{msg:From the client!}");
 }
 
+function testAI(){
+	stompClient.send("/chess/testAI", {}, "{msg: inane message to trigger AI}");
+}
+
 function testMsgPriv(){
 	stompClient.send("/chess/privMessage", {}, "{msg:From the client!}");
 	

@@ -12,8 +12,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.thombs.ChessWeb.Models.ChessAI;
 import com.thombs.ChessWeb.Models.ChessBoard;
 import com.thombs.ChessWeb.Models.ChessMatchmaking;
+import com.thombs.ChessWeb.Models.ChessPiece;
+import com.thombs.ChessWeb.Models.Side;
 
 @Controller
 public class ChessController {
@@ -90,5 +93,49 @@ public class ChessController {
 	@MessageMapping("/testAI")
 	public void testAI(SimpMessageHeaderAccessor headerAccessor, String jsonMsg){
 		ChessBoard testBoard = new ChessBoard();
+		testBoard.setAiLevel(1);
+		testBoard.setPlayer1("it12");
+		testBoard.setPlayer2("AI");
+		testBoard.setPlayerBlack("AI");
+		testBoard.setPlayerWhite("it12");
+		testBoard.setPlayerTurn("AI");
+		testBoard.setTurn(Side.BLACK);
+		
+		ChessPiece[] pieces = testBoard.getBoard();
+		for(ChessPiece piece : pieces){
+			piece.setCaptured(true);
+		}
+		
+		//Black king
+		pieces[4].setCaptured(false);
+		pieces[4].setRow(0);
+		pieces[4].setCol(0);
+		
+		//Black pawns
+		pieces[8].setCaptured(false);
+		pieces[8].setRow(2);
+		pieces[8].setCol(3);
+		
+		pieces[9].setCaptured(false);
+		pieces[9].setRow(1);
+		pieces[9].setCol(1);
+		
+		//White king
+		pieces[28].setCaptured(false);
+		pieces[28].setRow(7);
+		pieces[28].setCol(7);
+		
+		//White pawns
+		pieces[16].setCaptured(false);
+		pieces[16].setRow(6);
+		pieces[16].setCol(5);
+		pieces[17].setCaptured(false);
+		pieces[17].setRow(3);
+		pieces[17].setCol(4);
+		
+		
+		//Test AI move
+		ChessAI ai = new ChessAI(testBoard.getAiLevel(), testBoard, simp, "it12");
+		ai.makeMove();
 	}
 }

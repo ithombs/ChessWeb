@@ -59,7 +59,7 @@ public class ChessAI implements Runnable{
 		//Alpha beta pruning depth 4
 		else if(difficulty == 1)
 		{		
-			aiMove = aiMove1(board, 2);
+			aiMove = aiMove1(board, 3);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -72,7 +72,7 @@ public class ChessAI implements Runnable{
 		//depth of 8
 		else if(difficulty == 2)
 		{
-			aiMove = aiMove1(board, 4);
+			aiMove = aiMove1(board, 5);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -144,19 +144,21 @@ public class ChessAI implements Runnable{
 	{
 		int pos = 0;
 		int num = -1;
+		int highScore = -1;
 		List<ChessPiece> bestMoves = new ArrayList<ChessPiece>();
 		
 		for(ChessPiece cp: b.getPossibleMoves(b.getTurn()))
 		{
 			ChessBoard bb = b.CopyChessBoard();
 			bb.move(cp, true);
-			int value = alphaBeta(bb.CopyChessBoard(), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+			int value = alphaBeta(bb, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 			
-			if(value > num){
+			if(value > highScore){
+				highScore = value;
 				num = pos;
 				bestMoves.clear();
 				bestMoves.add(b.getPossibleMoves(b.getTurn()).get(num));
-			}else if(value == num){
+			}else if(value == highScore){
 				bestMoves.add(b.getPossibleMoves(b.getTurn()).get(pos));
 			}
 			pos++;
@@ -238,6 +240,12 @@ public class ChessAI implements Runnable{
 	private int evaluateBoard(ChessBoard b)
 	{
 		int hueristicValue = 0;
+		
+		if(b.isCheckmate()){
+			hueristicValue = Integer.MAX_VALUE - 100;
+		} else if(b.isOpponentInCheck()){
+			hueristicValue = 1000;
+		}
 		
 		for(ChessPiece c : b.getBoard())
 		{

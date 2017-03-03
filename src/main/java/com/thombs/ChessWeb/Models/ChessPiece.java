@@ -32,14 +32,14 @@ public class ChessPiece {
 	private int col;
 	private boolean isCaptured;
 	
-	public ChessPiece(int i, PieceType p, Side s, int r, int c)
+	public ChessPiece(int i, PieceType p, Side s, int r, int c, boolean captured)
 	{
 		id = i;
 		type = p;
 		side = s;
 		row = r;
 		col = c;
-		isCaptured = false;
+		isCaptured = captured;
 	}
 	
 	public PieceType getType() {
@@ -84,7 +84,7 @@ public class ChessPiece {
 	//Make a deep copy of a given ChessPiece
 	public static ChessPiece CopyChessPiece(ChessPiece c)
 	{
-		return new ChessPiece(c.getID(), c.getType(), c.getSide(), c.getRow(), c.getCol());
+		return new ChessPiece(c.getID(), c.getType(), c.getSide(), c.getRow(), c.getCol(), c.isCaptured());
 	}
 	
 	@Override
