@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.socket.TextMessage;
 
 public class ChessAI implements Runnable{
 
@@ -15,6 +16,7 @@ public class ChessAI implements Runnable{
 	//WebSocketSession s;
 	String username;
 	SimpMessagingTemplate msgTemplate;
+	private static final Logger log = LoggerFactory.getLogger(ChessAI.class);
 	
 	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username)
 	{
@@ -146,13 +148,14 @@ public class ChessAI implements Runnable{
 		int num = -1;
 		int highScore = -1;
 		List<ChessPiece> bestMoves = new ArrayList<ChessPiece>();
+		List<ChessPiece> possibleMoves = b.getPossibleMoves(b.getTurn());
 		
-		for(ChessPiece cp: b.getPossibleMoves(b.getTurn()))
+		for(ChessPiece cp: possibleMoves)
 		{
 			ChessBoard bb = b.CopyChessBoard();
 			bb.move(cp, true);
 			int value = alphaBeta(bb, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-			
+			log.info("Calculating move["+ pos +"/"+ (possibleMoves.size() - 1) +"] - " + cp + " - [score = "+ value +"]");
 			if(value > highScore){
 				highScore = value;
 				num = pos;
@@ -164,16 +167,16 @@ public class ChessAI implements Runnable{
 			pos++;
 		}
 		
-		if(num > -1){
+		if(possibleMoves.size() > 0){
 			if(bestMoves.size() == 1){
 				return bestMoves.get(0);
 			}else{
 				Random r = new Random();
 				return bestMoves.get(r.nextInt(bestMoves.size() - 1));
 			}
-		}
-		else
+		}else{
 			return null;
+		}	
 	}
 	
 	public ChessPiece aiMove2(ChessBoard b, int depth)
