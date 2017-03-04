@@ -178,7 +178,7 @@ public class ChessAI implements Runnable{
 			return null;
 		}	
 	}
-	
+	/*
 	public ChessPiece aiMove2(ChessBoard b, int depth)
 	{
 		BestMove best = null;
@@ -190,7 +190,7 @@ public class ChessAI implements Runnable{
 		}
 		return best.bestMove;
 	}
-	
+	*/
 	private int alphaBeta(ChessBoard b, int depth, int alpha, int beta, boolean computer)
 	{
 		int bestVal;
@@ -305,6 +305,7 @@ public class ChessAI implements Runnable{
 		return hueristicValue;
 	}
 	
+	/*
 	private BestMove AB2(ChessBoard b, int depth, int alpha, int beta, boolean computer)
 	{
 		if(depth == 0 || b.isGameOver())
@@ -354,7 +355,7 @@ public class ChessAI implements Runnable{
 			}
 		}
 	}
-	
+	*/
 	
 	//For testing
 	public static void main(String args[])
@@ -392,7 +393,7 @@ public class ChessAI implements Runnable{
 	
 	
 }
-
+/*
 class BestMove
 {
 	int value;
@@ -404,3 +405,4 @@ class BestMove
 		bestMove = best;
 	}
 }
+*/

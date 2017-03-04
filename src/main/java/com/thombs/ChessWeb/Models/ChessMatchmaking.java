@@ -139,7 +139,6 @@ public class ChessMatchmaking {
 		ChessBoard currentGame = activeGames.get(username);
 		if(currentGame == null){
 			msgTemplate.convertAndSendToUser(username, chessMsgDestination, new JSONObject().put("chessCommand", "error").put("msg", "No active game found").toString());
-			return;
 		}else{
 			boolean correctSide = currentGame.getPlayerTurn().equals(username);
 			ChessPiece previousPos = currentGame.getPiece(pieceID);
@@ -170,8 +169,9 @@ public class ChessMatchmaking {
         				jsonGameOver.put("winner", username);
         				msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonGameOver.toString());
         				
-        				//TODO: Save the game to the database here
-        				saveChessGame(currentGame, username);
+        				currentGame.setWinner(username);
+        				saveChessGame(currentGame);
+        				activeGames.remove(username);
         			}else{
         				ChessAI ai = new ChessAI(currentGame.getAiLevel(), currentGame, msgTemplate, username);
         				ai.makeMove();
@@ -187,6 +187,10 @@ public class ChessMatchmaking {
         				jsonGameOver.put("winner", username);
         				msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonGameOver.toString());
         				msgTemplate.convertAndSendToUser(opponent, chessMsgDestination, jsonGameOver.toString());
+        				
+        				currentGame.setWinner(username);
+        				saveChessGame(currentGame);
+        				activeGames.remove(username);
         			}
 				}
 			}else{
@@ -202,32 +206,34 @@ public class ChessMatchmaking {
 		}
 	}
 	
-	private void saveChessGame(ChessBoard game, String winner){
+	private void saveChessGame(ChessBoard game){
 		ChessGame chessGame;
 		User white, black;
-		long winnerL;
-		
-		try{
-			winnerL = Long.parseLong(winner);
-		}catch(Exception e){
-			winnerL = -2;
-		}
+		long winner;
 		
 		if(!game.getPlayerWhite().equals("AI")){
 			white = userService.getUser(game.getPlayerWhite());
 		}else{
 			white = new User();
 			white.setUserid(-1);
+			white.setUsername("AI");
 		}
 		if(!game.getPlayerBlack().equals("AI")){
 			black = userService.getUser(game.getPlayerBlack());
 		}else{
 			black = new User();
 			black.setUserid(-1);
+			black.setUsername("AI");
+		}
+		
+		if(game.getWinner().equals(white.getUsername())){
+			winner = white.getUserid();
+		}else{
+			winner = black.getUserid();
 		}
 		
 		chessGame = new ChessGame(game, white.getUserid(), black.getUserid());
-		chessGame.setWinner(winnerL);
+		chessGame.setWinner(winner);
 		
 		chessService.saveChessGame(chessGame);
 	}

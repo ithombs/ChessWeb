@@ -22,6 +22,7 @@ public class ChessBoard {
 	private String playerWhite;
 	private String playerBlack;
 	private String playerTurn;
+	private String winner;
 	private int aiLevel;
 	
 	public ChessBoard()
@@ -81,6 +82,14 @@ public class ChessBoard {
 	
 	public int getAiLevel(){
 		return aiLevel;
+	}
+	
+	public String getWinner(){
+		return this.winner;
+	}
+	
+	public void setWinner(String winner){
+		this.winner = winner;
 	}
 	
 	public String getPlayerWhite(){
