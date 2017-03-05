@@ -7,6 +7,7 @@ import java.util.Random;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 public class ChessAI implements Runnable{
@@ -17,6 +18,14 @@ public class ChessAI implements Runnable{
 	String username;
 	SimpMessagingTemplate msgTemplate;
 	private static final Logger log = LoggerFactory.getLogger(ChessAI.class);
+	
+	//@Autowired
+	//private ChessGameService chessService;
+	
+	//@Autowired
+	//private UserService userService;
+	@Autowired
+	private ChessMatchmaking chessMatcher;
 	
 	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username)
 	{
@@ -114,6 +123,10 @@ public class ChessAI implements Runnable{
 				jsonGameOver.put("chessCommand", "gameOver");
 				jsonGameOver.put("winner", "AI");
 				msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", jsonGameOver.toString());
+				
+				//TODO: Save game here and maybe remove it from the active games list
+				board.setWinner("AI");
+				chessMatcher.saveChessGame(board);
 			}
 		}
 		catch(Exception e)
@@ -172,7 +185,7 @@ public class ChessAI implements Runnable{
 				return bestMoves.get(0);
 			}else{
 				Random r = new Random();
-				return bestMoves.get(r.nextInt(bestMoves.size() - 1));
+				return bestMoves.get(r.nextInt(bestMoves.size() - 1) + 1);
 			}
 		}else{
 			return null;

@@ -81,6 +81,7 @@ public class ChessController {
 				break;
 			case "reconnect":
 				logger.info("ChessCommand [reconnect] recieved from " + user.getName() + ": " + jsonMsg);
+				chessMM.playerReconnected(user.getName());
 				break;
 			default:
 				logger.info("Unknown ChessCommand recieved from " + user.getName() + ": " + jsonMsg);

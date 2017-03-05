@@ -55,6 +55,23 @@ function initStompChannels(){
 	        	console.log(msg.winner + " has won the game!")
 	        	document.getElementById("title").innerHTML = msg.winner + " has won the game!";
 	        	document.getElementById("queueBtn").disabled = false;
+	        }else if(msg.chessCommand == "gameReconnect"){
+	        	initPieces();
+	        	document.getElementById("title").innerHTML = "Opponent: " + msg.opponent;
+	        	document.getElementById("side").innerHTML = "You are " + msg.side;
+	        	
+	        	for(var i = 0; i < msg.numMoves; i++){
+	        		var move = "move_" + i;
+	        		tileFrom = document.getElementById(msg[move].id).parentElement.title;
+	        		movePiece(msg[move].id, msg[move].row + "|" + msg[move].col, true);
+	        		tileTo = document.getElementById(msg[move].id).parentElement.title;
+	        		
+	        		if(color == true)
+		        		document.getElementById("moveList").innerHTML += "<span class='whiteMove'>" + tileFrom + " - " + tileTo + "</span><br>";
+		        	else
+		        		document.getElementById("moveList").innerHTML += "<span class='blackMove'>" + tileFrom + " - " + tileTo + "</span><br>";
+		        	color = !color;
+	        	}
 	        }
 	    });
 		
@@ -63,6 +80,8 @@ function initStompChannels(){
 			console.log(msg);
 	        stompClient.send("/chess/chessPong", {}, "{pong:'pong'}");
 	    });
+		
+		checkGameStatus();
 	});
 }
 
@@ -902,7 +921,7 @@ function stompWebSockets(){
 //Check if a game was in progress and reconnect to it if there was
 function checkGameStatus(){
 	var jsonMsg = new Object();
-	jsonMsg.chessCommand = "recon";
+	jsonMsg.chessCommand = "reconnect";
 	console.log(JSON.stringify(jsonMsg));
 	
 	stompClient.send("/chess/chessMsg", {}, JSON.stringify(jsonMsg));

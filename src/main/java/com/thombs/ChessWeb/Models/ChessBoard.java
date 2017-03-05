@@ -280,7 +280,7 @@ public class ChessBoard {
 				//System.out.println("---START THREATENED CHECK---");
 				//System.out.println(turn.toString() + " is in check: " + checkCheck());
 				//System.out.println("---END THREATENED CHECK---");
-				moveList.add(p);
+				
 				return true;
 			}
 			else
@@ -1563,6 +1563,7 @@ public class ChessBoard {
 			}else{
 				playerTurn = player1;
 			}
+			moveList.add(c);
 			return true;
 		}
 		else

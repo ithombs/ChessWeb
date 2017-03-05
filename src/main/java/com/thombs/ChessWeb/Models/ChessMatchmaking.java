@@ -206,7 +206,33 @@ public class ChessMatchmaking {
 		}
 	}
 	
-	private void saveChessGame(ChessBoard game){
+	public void playerReconnected(String username){
+		ChessBoard gameInProgress = activeGames.get(username);
+		if(gameInProgress != null){
+			log.info("Game-in-progress found for [" + username +"] passing data to client");
+			JSONObject gameData = new JSONObject();
+			gameData.put("chessCommand", "gameReconnect");
+			gameData.put("numMoves", gameInProgress.getMoveList().size());
+			gameData.put("side", gameInProgress.getPlayerWhite().equals(username)?"White":"Black");
+			gameData.put("opponent", gameInProgress.getPlayer1().equals(username)?gameInProgress.getPlayer2():gameInProgress.getPlayer1());
+			
+			for(int i = 0; i < gameInProgress.getMoveList().size(); i++){
+				JSONObject moveJSON = new JSONObject();
+				moveJSON.put("id", gameInProgress.getMoveList().get(i).getID());
+				moveJSON.put("row", gameInProgress.getMoveList().get(i).getRow());
+				moveJSON.put("col", gameInProgress.getMoveList().get(i).getCol());
+				gameData.put("move_"+i, moveJSON);
+			}
+			
+			msgTemplate.convertAndSendToUser(username, chessMsgDestination, gameData.toString());
+			
+		}else{
+			log.info("No game-in-progress found for [" + username +"]");
+		}
+	}
+	
+	//Don't think I like this. Probably a better way to save games from here
+	public void saveChessGame(ChessBoard game){
 		ChessGame chessGame;
 		User white, black;
 		long winner;
