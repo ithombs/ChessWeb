@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -29,6 +30,8 @@ import com.thombs.ChessWeb.Models.Side;
 import com.thombs.ChessWeb.Models.ChessPiece;
 
 
+@Configuration
+//@EnableSpringConfigured
 @Service
 @Scope(value = "singleton")
 @EnableScheduling
@@ -82,7 +85,7 @@ public class ChessMatchmaking {
 		msgTemplate.convertAndSendToUser(username, chessMsgDestination, json.toString());
 		
 		if(aiGame.getPlayerTurn().equals("AI")){
-			ChessAI ai = new ChessAI(aiGame.getAiLevel(), aiGame, msgTemplate, username);
+			ChessAI ai = new ChessAI(aiGame.getAiLevel(), aiGame, msgTemplate, username, this);
 			ai.makeMove();
 		}
 	}
@@ -173,7 +176,7 @@ public class ChessMatchmaking {
         				saveChessGame(currentGame);
         				activeGames.remove(username);
         			}else{
-        				ChessAI ai = new ChessAI(currentGame.getAiLevel(), currentGame, msgTemplate, username);
+        				ChessAI ai = new ChessAI(currentGame.getAiLevel(), currentGame, msgTemplate, username, this);
         				ai.makeMove();
         			}
 				}else{

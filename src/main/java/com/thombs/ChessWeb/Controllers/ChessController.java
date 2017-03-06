@@ -23,10 +23,10 @@ public class ChessController {
 	private static final Logger logger = LoggerFactory.getLogger(ChessController.class);
 	
 	@Autowired
-    SimpMessagingTemplate simp;
+    private SimpMessagingTemplate simp;
 	
 	@Autowired
-	ChessMatchmaking chessMM;
+	private ChessMatchmaking chessMM;
 	
 	//Client sends a message to the STOMP URL /chess/message
 	@MessageMapping("/message")
@@ -136,7 +136,7 @@ public class ChessController {
 		
 		
 		//Test AI move
-		ChessAI ai = new ChessAI(testBoard.getAiLevel(), testBoard, simp, "it12");
+		ChessAI ai = new ChessAI(testBoard.getAiLevel(), testBoard, simp, "it12", chessMM);
 		ai.makeMove();
 	}
 }

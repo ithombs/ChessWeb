@@ -82,6 +82,10 @@ function initStompChannels(){
 	    });
 		
 		checkGameStatus();
+	}, function(errorMessage){
+		if(errorMessage.contains("Whoops!")){
+			setTimeout(connect, 3000);
+		}
 	});
 }
 
@@ -199,6 +203,7 @@ function connect() {
 	*/
 }
 
+/*
 function reconnect(userN)
 {
 	socket = new WebSocket('ws://localhost:8080/WebSocks/test1');
@@ -207,7 +212,7 @@ function reconnect(userN)
 	//initPieces();
 	connect("normal");
 }
-
+*/
 //an opponent was found and a game started
 function chessGameStarted()
 {
@@ -227,7 +232,7 @@ function queueTimer()
 	document.getElementById("timer").innerHTML = "Queue Time: "+ timer;
 }
 
-
+/*
 //Enter queue to play a game of chess. Send the UserName from the JSP page.
 function enterQueue2(userN)
 {
@@ -256,7 +261,7 @@ function vsAI(level)
 	removePieces();
 	initPieces();
 }
-
+*/
 //Params: 
 //-piece = the id of the img
 //-tile  = the id of the chess board tile which holds the piece imgs
@@ -361,12 +366,12 @@ function drop(ev) {
     //check if the ID of the element is a number (the IDs of the tiles are not truly numbers due to use of the pipe character)
     sendMove();
 }
-
+/*
 function boardClick(id)
 {
 	alert(id);
 }
-
+*/
 function createBoard()
 {
 	var board = document.getElementById("board");
@@ -709,8 +714,8 @@ function removePieces()
 
 function concede(player)
 {
-	socket.send("surr:" + player);
-	
+	//socket.send("surr:" + player);
+	//TODO: Modify this to use the correct format
 }
 
 /*

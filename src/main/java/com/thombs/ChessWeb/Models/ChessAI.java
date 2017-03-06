@@ -7,7 +7,6 @@ import java.util.Random;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 public class ChessAI implements Runnable{
@@ -24,15 +23,15 @@ public class ChessAI implements Runnable{
 	
 	//@Autowired
 	//private UserService userService;
-	@Autowired
 	private ChessMatchmaking chessMatcher;
 	
-	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username)
+	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username, ChessMatchmaking chessMM)
 	{
 		difficulty = diff;
 		board = b;
 		this.msgTemplate = msgTemplate;
 		this.username = username;
+		chessMatcher = chessMM;
 	}
 	
 	public void makeMove(){
