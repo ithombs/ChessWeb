@@ -56,7 +56,10 @@ function initStompChannels(){
 	        	document.getElementById("title").innerHTML = msg.winner + " has won the game!";
 	        	document.getElementById("queueBtn").disabled = false;
 	        }else if(msg.chessCommand == "gameReconnect"){
-	        	initPieces();
+	        	var blackKing = document.getElementById("4");
+	        	if(blackKing == null){
+	        		initPieces();
+	        	}
 	        	document.getElementById("title").innerHTML = "Opponent: " + msg.opponent;
 	        	document.getElementById("side").innerHTML = "You are " + msg.side;
 	        	
@@ -83,7 +86,8 @@ function initStompChannels(){
 		
 		checkGameStatus();
 	}, function(errorMessage){
-		if(errorMessage.contains("Whoops!")){
+		if(errorMessage.indexOf("Whoops!") !== -1){
+			console.log("Attempting to reconnect...");
 			setTimeout(connect, 3000);
 		}
 	});
