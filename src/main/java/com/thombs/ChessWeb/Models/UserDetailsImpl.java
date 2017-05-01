@@ -34,7 +34,8 @@ public class UserDetailsImpl implements UserDetailsService{
 		}
 		logger.info("User found!!!");
 		
-		authedUser = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getRoles(user));
+		//authedUser = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getRoles(user));
+		authedUser = new ChessUser(user, getRoles(user));
 		return authedUser;
 	}
 	

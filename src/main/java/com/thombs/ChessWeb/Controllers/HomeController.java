@@ -10,19 +10,15 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.thombs.ChessWeb.Models.ChessGame;
 import com.thombs.ChessWeb.Models.ChessGameService;
 import com.thombs.ChessWeb.Models.ChessMove;
+import com.thombs.ChessWeb.Models.ChessUser;
 import com.thombs.ChessWeb.Models.Role;
 import com.thombs.ChessWeb.Models.User;
 import com.thombs.ChessWeb.Models.UserService;
@@ -51,9 +48,6 @@ public class HomeController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
     private UserValidator userValidator;
@@ -147,11 +141,14 @@ public class HomeController {
 	
 	@RequestMapping("/chessReplays")
 	public String chessReplay(){
+		
 		return "chessReplay";
 	}
 	
 	@RequestMapping("/profile")
-	public String userProfile(){
+	public String userProfile(Model model, Principal principal){
+		User user = getCurrentUser(principal);
+		model.addAttribute("username", user.getUsername());
 		return "chessProfile";
 	}
 	
@@ -163,7 +160,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-	public String userCreation(@ModelAttribute("user")@Valid User user, BindingResult result, Model model, HttpServletRequest request){
+	public String userCreation(@ModelAttribute("user") User user, BindingResult result, Model model, HttpServletRequest request){
 		userValidator.validate(user, result);
 		List<Role> roles = new ArrayList<Role>();
 		roles.add(Role.USER);
@@ -190,6 +187,15 @@ public class HomeController {
 		return "userCreation";
 	}
 	
+	//TODO: Must be a better way of doing this (maybe make an interface and implement it within User and ChessUser)
+	private User getCurrentUser(Principal principal){
+		Object u = ((Authentication) principal).getPrincipal();
+		if(u instanceof ChessUser){
+			return ((ChessUser) u).getUser();
+		}else{
+			return ((User)u);
+		}
+	}
 	
 	private String getPrincipal(){
         String userName = null;
