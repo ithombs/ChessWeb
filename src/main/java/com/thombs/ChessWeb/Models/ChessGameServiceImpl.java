@@ -32,7 +32,7 @@ public class ChessGameServiceImpl implements ChessGameService{
 
 	@Override
 	@Transactional
-	public List<ChessGame> getChessGamesByUser(int userID) {
+	public List<ChessGame> getChessGamesByUser(long userID) {
 		return chessDAO.getChessGamesByUser(userID);
 	}
 

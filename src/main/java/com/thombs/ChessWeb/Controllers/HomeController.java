@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thombs.ChessWeb.Models.ChessGame;
 import com.thombs.ChessWeb.Models.ChessGameService;
+import com.thombs.ChessWeb.Models.ChessGameUtils;
 import com.thombs.ChessWeb.Models.ChessMove;
 import com.thombs.ChessWeb.Models.ChessUser;
 import com.thombs.ChessWeb.Models.Role;
@@ -148,6 +149,13 @@ public class HomeController {
 	@RequestMapping("/profile")
 	public String userProfile(Model model, Principal principal){
 		User user = getCurrentUser(principal);
+		
+		List<ChessGame> games = chessService.getChessGamesByUser(user.getUserid());
+		
+		model.addAttribute("blackWins", ChessGameUtils.getNumBlackWins(games, user.getUserid()));
+		model.addAttribute("whiteWins", ChessGameUtils.getNumWhiteWins(games, user.getUserid()));
+		model.addAttribute("totalWins", ChessGameUtils.getNumWins(games, user.getUserid()));
+		model.addAttribute("totalGames", games.size());
 		model.addAttribute("username", user.getUsername());
 		return "chessProfile";
 	}

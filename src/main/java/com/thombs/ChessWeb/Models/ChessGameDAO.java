@@ -6,5 +6,5 @@ public interface ChessGameDAO {
 	public ChessGame findGameByID(int id);
 	public ChessGame saveChessGame(ChessGame game);
 	public List<ChessGame> getAllChessGames();
-	public List<ChessGame> getChessGamesByUser(int userID);
+	public List<ChessGame> getChessGamesByUser(long userID);
 }

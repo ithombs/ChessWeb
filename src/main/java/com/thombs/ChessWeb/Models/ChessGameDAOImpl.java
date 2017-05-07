@@ -35,9 +35,9 @@ public class ChessGameDAOImpl implements ChessGameDAO{
 	}
 
 	@Override
-	public List<ChessGame> getChessGamesByUser(int userID) {
+	public List<ChessGame> getChessGamesByUser(long userID) {
 		Session session = sessionFactory.getCurrentSession();
-		Query q = session.createNamedQuery("from ChessGame where playerWhite = :user or playerBlack = :user");
+		Query q = session.createQuery("from ChessGame where playerWhite = :user or playerBlack = :user");
 		q.setParameter("user", userID);
 		List<ChessGame> games = q.getResultList();
 		return games;
