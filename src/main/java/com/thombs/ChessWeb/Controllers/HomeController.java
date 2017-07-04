@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thombs.ChessWeb.Models.ChessGame;
@@ -140,8 +141,24 @@ public class HomeController {
 		return "basicChess";
 	}
 	
+	@RequestMapping("/ajaxChessMoveList")
+	@ResponseBody
+	public List<ChessMove> getGameMoveList(@RequestParam("id") String id){
+		ChessGame game = chessService.getChessGameByID(new Integer(id));
+		if(game != null){
+			return game.getMoves();
+		}else{
+			return new ArrayList<ChessMove>();
+		}
+	}
+	
 	@RequestMapping("/chessReplays")
-	public String chessReplay(){
+	public String chessReplay(Model model, Principal principal){
+		User user = getCurrentUser(principal);
+		List<ChessGame> games = chessService.getChessGamesByUser(user.getUserid());
+		
+		model.addAttribute("username", user.getUsername());
+		model.addAttribute("gameIDs", games);
 		
 		return "chessReplay";
 	}
@@ -195,7 +212,6 @@ public class HomeController {
 		return "userCreation";
 	}
 	
-	//TODO: Must be a better way of doing this (maybe make an interface and implement it within User and ChessUser)
 	private User getCurrentUser(Principal principal){
 		Object u = ((Authentication) principal).getPrincipal();
 		if(u instanceof ChessUser){

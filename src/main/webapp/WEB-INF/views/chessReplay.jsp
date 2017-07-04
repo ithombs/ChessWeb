@@ -12,7 +12,7 @@
 	<script type="text/javascript">
     function ajaxTest(id) {
         $.ajax({
-            url : 'ajaxChessMoveList.html?id=' + id,
+            url : 'ajaxChessMoveList?id=' + id,
             success : function(data) {
             	console.log(data);
             	setReplayMoveList(data);
@@ -66,7 +66,7 @@
 	<option value="" selected="selected">Select a game</option>
 	
 	<c:forEach var="id" items="${gameIDs}" varStatus="loopCounter">
-		<option value='<c:out value="${id}"/>'><c:out value="${gameDates.get(loopCounter.index)}"/></option>
+		<option value='<c:out value="${id.gameID}"/>'><c:out value="${id.gameDate}"/></option>
 	</c:forEach>
 </select>
 </div>

@@ -46,17 +46,9 @@ public class ChessAI implements Runnable{
 	@Override
 	public void run() 
 	{
-		//System.out.println("---Entered AI move---");
 		ChessPiece aiMove = null;
 		int prevR = -1, prevC = -1;
 		
-		//DEBUG - print out all possible moves for this turn
-		/*
-		for(ChessPiece p : board.getPossibleMoves(board.getTurn()))
-		{
-			//System.out.println("-" + p.toString());
-		}
-		*/
 		//random move level
 		if(difficulty == 0)
 		{
@@ -111,7 +103,6 @@ public class ChessAI implements Runnable{
 		//Send the move to the client
 		try
 		{
-			//ChessPiece p = board.getPiece(aiMove.getID());
 			JSONObject json = new JSONObject();
 			json.put("chessCommand", "move");
 			json.put("pieceID", aiMove.getID());
@@ -127,7 +118,6 @@ public class ChessAI implements Runnable{
 				jsonGameOver.put("winner", "AI");
 				msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", jsonGameOver.toString());
 				
-				//TODO: Save game here and maybe remove it from the active games list
 				board.setWinner("AI");
 				chessMatcher.saveChessGame(board);
 			}
@@ -139,7 +129,6 @@ public class ChessAI implements Runnable{
 			if(board.isGameOver())
 				System.out.println("AI move failed due to game being over.");
 		}
-		//System.out.println("---Exit AI move---");
 	}
 	
 	//Very basic 'AI'. Picks a random valid move and takes it
@@ -311,57 +300,6 @@ public class ChessAI implements Runnable{
 		return hueristicValue;
 	}
 	
-	/*
-	private BestMove AB2(ChessBoard b, int depth, int alpha, int beta, boolean computer)
-	{
-		if(depth == 0 || b.isGameOver())
-		{
-			return new BestMove(evaluateBoard(b), null);
-		}
-		else
-		{
-			if(computer)
-			{
-				ChessPiece bestMove = null;
-				int bestVal = alpha;
-				for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
-				{
-					ChessBoard bb = b.CopyChessBoard();
-					bb.move(c, true);
-					BestMove bm = AB2(bb, depth - 1, alpha, beta, false);
-					bm.value = Math.max(alpha, bm.value);
-				
-					if(beta <= bm.value){
-						break;
-					}else{
-						bestMove = c;
-					}	
-				}
-				return new BestMove(alpha, bestMove);
-			}
-			else
-			{
-				ChessPiece bestMove = null;
-				int bestVal = beta;
-				for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
-				{
-					ChessBoard bb = b.CopyChessBoard();
-					bb.move(c, true);
-					BestMove bm = AB2(bb, depth - 1, alpha, beta, true);
-					
-					if(bm.value < beta)
-					{
-						beta = bm.value;
-					}
-					bestMove = c;
-					if(alpha >= beta)
-						break;
-				}
-				return new BestMove(beta, bestMove);
-			}
-		}
-	}
-	*/
 	
 	//For testing
 	public static void main(String args[])
@@ -432,7 +370,7 @@ class SubMove implements Runnable{
 		board.move(move, true);
 		int value = alphaBeta(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 		ScoredChessMove scoredMove = new ScoredChessMove(value, move);
-		log.info(move + " === " + scoredMove.score);
+		//log.info(move + " === " + scoredMove.score);
 		moves.add(scoredMove);
 	}
 	

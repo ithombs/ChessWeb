@@ -736,7 +736,7 @@ function initReplay()
 	initPieces();
 	for(i = 0; i < replayMoveList.length; i++)
 	{
-		piece = replayMoveList[i].split("|")[0];
+		piece = JSON.parse(replayMoveList[i].move).pieceID;
 		prevTile = document.getElementById(piece).parentElement.id;
 		prevPositions[i] = piece + "|" + prevTile;
 		moveForward();
@@ -759,7 +759,9 @@ function setReplayMoveList(moveList)
 	replayMoveList = [];
 	prevPositions = [];
 	
-	replayMoveList = moveList.split(" ");
+	for(var i = 0; i < moveList.length; i++){
+		replayMoveList[i] = moveList[i];
+	}
 	replayMoveList.pop();
 	initReplay();
 	//removePieces();
@@ -774,8 +776,8 @@ function setReplayMoveList(moveList)
 function moveForward()
 {
 	var piece, tile;
-	piece = replayMoveList[mlIndex].split("|")[0];
-	tile = replayMoveList[mlIndex].split("|")[1] +"|"+ replayMoveList[mlIndex].split("|")[2];
+	piece = JSON.parse(replayMoveList[mlIndex].move).pieceID;
+	tile = JSON.parse(replayMoveList[mlIndex].move).row +"|"+ JSON.parse(replayMoveList[mlIndex].move).col;
 	//console.log("Replay move: " + piece + " to " + tile)
 	
 	
