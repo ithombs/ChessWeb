@@ -114,109 +114,7 @@ function connect() {
 	
 	initStompChannels();
 	
-	/*
-	if ('WebSocket' in window){
-		  console.log('Websocket supported');
-		  console.log('Connection attempted');
-		 
-
-		  socket.onmessage = function (evt) 
-		     { 
-		        var received_msg = evt.data;
-		        console.log(received_msg);
-		        console.log('message received!');
-		        
-		        if(received_msg.indexOf("move") != -1)
-		        {
-		        	if(received_msg.indexOf("ml") != -1)
-		        		console.log("PROBLEM");
-		        	
-		        	received_msg = received_msg.substr(5);
-		        	var str = received_msg.split("|");
-		        	var piece = str[0];
-		        	var tile = str[1] +"|"+ str[2];
-		        	
-		        	if(str[3] != "-1")
-		        		movePiece(piece, tile, true);
-		        	else
-		        		movePiece(piece, tile, false);
-		        	//console.log(piece + tile);
-		        }
-		        else if(received_msg.indexOf("connected") != -1)
-		        {
-		        	//timer = 0;
-		        	//document.getElementById("timer").innerHTML = timer;
-		        	clearInterval(timerVar);
-		        }
-		        else if(received_msg.indexOf("opponent") != -1)
-		        {
-		        	document.getElementById("title").innerHTML = "Opponent: " + received_msg.split(":")[1];
-		        	chessGameStarted();
-		        	initPieces();
-		        }
-		        else if(received_msg.indexOf("side") != -1)
-		        {
-		        	//console.log("side: " + received_msg.split(":")[1]);
-		        	document.getElementById("side").innerHTML = "You are " + received_msg.split(":")[1];
-		        }
-		        else if(received_msg.indexOf("gameOver") != -1)
-		        {
-		        	console.log(received_msg.split(":")[1] + " has won the game!")
-		        	document.getElementById("title").innerHTML = received_msg.split(":")[1] + " has won the game!";
-		        	document.getElementById("queueBtn").disabled = false;
-		        	socket.close();
-		        }
-		        else if(received_msg.indexOf("ml1") != -1)
-		        {
-		        	msg = received_msg.substr(4);
-		        	console.log("TEST1: " + msg);
-		        	tileFrom = document.getElementById(msg).title;
-		        }
-		        else if(received_msg.indexOf("ml2") != -1)
-		        {
-		        	msg = received_msg.substr(4);
-		        	console.log("TEST2: " + msg);
-		        	tileTo = document.getElementById(msg).title;
-		        	if(color == true)
-		        		document.getElementById("moveList").innerHTML += "<span class='whiteMove'>" + tileFrom + " - " + tileTo + "</span><br>";
-		        	else
-		        		document.getElementById("moveList").innerHTML += "<span class='blackMove'>" + tileFrom + " - " + tileTo + "</span><br>";
-		        	color = !color;
-		        }
-		        else if(received_msg.indexOf("oppRecon") != -1)
-		        {
-		        	var ml = document.getElementById("moveList").innerHTML;
-		        	socket.send("md:" +ml);
-		        	//console.log(ml);
-		        }
-		        else if(received_msg.indexOf("md") != -1)
-		        {
-		        	console.log("---RECEIVED MOVE LIST!---");
-		        	var msg = received_msg.substr(3);
-		        	document.getElementById("moveList").innerHTML = msg;
-		        	//console.log(msg);
-		        	if(msg.split("-").length % 2 == 0)
-		        		color = false;
-		        }
-		        
-		     }
-
-		} else {
-		  console.log('Websocket not supported');
-		}
-	*/
 }
-
-/*
-function reconnect(userN)
-{
-	socket = new WebSocket('ws://localhost:8080/WebSocks/test1');
-	userName = userN;
-	reconn = true;
-	//initPieces();
-	connect("normal");
-}
-*/
 //an opponent was found and a game started
 function chessGameStarted()
 {
@@ -236,36 +134,7 @@ function queueTimer()
 	document.getElementById("timer").innerHTML = "Queue Time: "+ timer;
 }
 
-/*
-//Enter queue to play a game of chess. Send the UserName from the JSP page.
-function enterQueue2(userN)
-{
-	removePieces();
-	socket = new WebSocket('ws://localhost:8080/WebSocks/test1');
-	userName = userN;
-	connect("normal");
-	document.getElementById("queueBtn").disabled = true;
-	if(document.getElementById("ReconnectBtn") != null)
-		document.getElementById("ReconnectBtn").disabled = true;
-	document.getElementById("title").innerHTML = "Searching...";
-	document.getElementById("moveList").innerHTML = "";
-	//setTimeout(function(){ alert("Hello"); }, 3000);
-	
-	
-	
-	timerVar = setInterval(queueTimer, 1000);
-}
 
-function vsAI(level)
-{
-	socket = new WebSocket('ws://localhost:8080/WebSocks/aiOpp?' + level);
-	connect("computer");
-	document.getElementById("title").innerHTML = "VS Computer";
-	document.getElementById("moveList").innerHTML = "";
-	removePieces();
-	initPieces();
-}
-*/
 //Params: 
 //-piece = the id of the img
 //-tile  = the id of the chess board tile which holds the piece imgs
