@@ -107,7 +107,7 @@ function enterQueue(type, level){
 	json.chessCommand = "enterQueue";
 	json.type = type;
 	json.level = level;
-	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json))
+	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json));
 }
 
 function connect() {
@@ -589,6 +589,9 @@ function concede(player)
 {
 	//socket.send("surr:" + player);
 	//TODO: Modify this to use the correct format
+	var json = new Object();
+	json.chessCommand = "concede";
+	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json));
 }
 
 /*
