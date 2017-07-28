@@ -725,8 +725,12 @@ function buildReplayMoveList()
 	for(i = 0; i < replayMoveList.length; i++)
 	{
 		var fromID, toID;
+		var moveJSON = JSON.parse(replayMoveList[i].move);
+		
 		fromID = prevPositions[i].substr(prevPositions[i].indexOf("|") + 1);
-		toID = replayMoveList[i].substr(replayMoveList[i].indexOf("|") + 1);
+		toID = moveJSON.row + "|" + moveJSON.col;
+		
+		//toID = replayMoveList[i].substr(replayMoveList[i].indexOf("|") + 1);
 		
 		
 		from = document.getElementById(fromID).title;
