@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .antMatchers("/**").permitAll()
 	        .and()
 	    .formLogin()
-	        .loginPage("/login").loginProcessingUrl("/login").failureUrl("/404")
+	        .loginPage("/").loginProcessingUrl("/login").failureUrl("/404")
 	        .permitAll()
 	        .and()
 	    .logout()

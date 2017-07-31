@@ -54,19 +54,41 @@
  -->
 </div>
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script type="text/javascript">
+    function ajaxPassChange() {
+    		//var cName = "${_csrf.parameterName}";
+    		var cVal = "${_csrf.token}";
+    		var oldPVal = $('#oldP').value;
+    	
+        $.ajax({
+        		type: 'POST',
+            url : 'passwordChange',
+            data: {
+            		oldP: oldPVal,
+            		newP:$('#newP').value,
+            		_csrf:cVal 
+            },
+            success : function(data) {
+            		console.log(data);
+            }
+        });
+    }
+</script>
+
 <div id="accountOptions">
 	<h3 style="text-align:center;">Password Change</h3>
 	<br/>
-	<p style="text-align:center; color:red;">${passChangeResult}</p>
+	<p id="passChangeResult" style="text-align:center; color:red;">${passChangeResult}</p>
 	<br/>
-	<form action="/test1/passwordChange.html" method="POST">
-		Old Password: <input type="password" name="oldPass">
+	<form action="passwordChange" method="POST">
+		Old Password: <input type="password" id="oldP" name="oldPass">
 		<br/>
-		New Password:<input type="password" name="newPass">
+		New Password:<input type="password" id="newP" name="newPass">
 		<br/>
 		Confirm Password:<input type="password" name="confirmNewPass">
 		<br/>
-		<button type="submit" id="passChangeBtn">Submit</button>
+		<button type="button" onclick="ajaxPassChange();" id="passChangeBtn">Submit</button>
 	</form>
 </div>
 

@@ -211,6 +211,14 @@ public class HomeController {
 		return "userCreation";
 	}
 	
+	@RequestMapping(value = "/passwordChange", method = RequestMethod.POST)
+	@ResponseBody
+	public String passwordChange(@RequestParam("oldP")String oldP, String newP){
+		logger.info("oldP: " + oldP);
+		logger.info("newP: " + newP);
+		return "{result:'pass'}";
+	}
+	
 	private User getCurrentUser(Principal principal){
 		Object u = ((Authentication) principal).getPrincipal();
 		if(u instanceof ChessUser){
