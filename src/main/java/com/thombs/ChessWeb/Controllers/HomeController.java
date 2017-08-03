@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,6 +58,8 @@ public class HomeController {
 	@Autowired
 	private ChessGameService chessService;
 
+	@Autowired
+	private PasswordEncoder passEncoder;
 	
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -165,6 +168,7 @@ public class HomeController {
 	@RequestMapping("/profile")
 	public String userProfile(Model model, Principal principal){
 		User user = getCurrentUser(principal);
+		//logger.info(passEncoder.encode("testing"));
 		
 		List<ChessGame> games = chessService.getChessGamesByUser(user.getUserid());
 		
@@ -213,10 +217,19 @@ public class HomeController {
 	
 	@RequestMapping(value = "/passwordChange", method = RequestMethod.POST)
 	@ResponseBody
-	public String passwordChange(@RequestParam("oldP")String oldP, String newP){
-		logger.info("oldP: " + oldP);
-		logger.info("newP: " + newP);
-		return "{result:'pass'}";
+	public String passwordChange(String oldP, String newP, String confNewP, Principal principal){
+		User u = getCurrentUser(principal);
+		boolean changed = false;
+		if(passEncoder.matches(oldP, u.getPassword()) && newP.equals(confNewP)){
+			u.setPassword(newP);
+			logger.info("New pass: " + newP);
+			changed = true;
+			u = userService.saveUser(u);
+		}
+		JSONObject json = new JSONObject();
+		json.put("result", changed);
+		
+		return json.toString();
 	}
 	
 	private User getCurrentUser(Principal principal){

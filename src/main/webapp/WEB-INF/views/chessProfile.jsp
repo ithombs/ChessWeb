@@ -58,21 +58,38 @@
 <script type="text/javascript">
     function ajaxPassChange() {
     		//var cName = "${_csrf.parameterName}";
+    		
+    		var result = $("#passChangeResult").text("");
     		var cVal = "${_csrf.token}";
-    		var oldPVal = $('#oldP').value;
+    		var oldPVal = $('#oldP').val();
+    		var newPVal = $('#newP').val();
+    		var confNewPVal = $('#confNewP').val();
     	
-        $.ajax({
-        		type: 'POST',
-            url : 'passwordChange',
-            data: {
-            		oldP: oldPVal,
-            		newP:$('#newP').value,
-            		_csrf:cVal 
-            },
-            success : function(data) {
-            		console.log(data);
-            }
-        });
+	        $.ajax({
+	        	type: 'POST',
+	            url : 'passwordChange',
+	            data: {
+	            		_csrf:cVal, 
+	            		oldP: oldPVal,
+	            		newP: newPVal,
+	            		confNewP: confNewPVal
+	            },
+	            success : function(data) {
+	            		var result = $("#passChangeResult");
+	            		data = JSON.parse(data);
+	            		if(data.result == true){
+	            			result.text("Password change successful!");
+	            			result.css("color", "green");
+	            		}else{
+	            			result.text("Password change failed!");
+	            			result.css("color", "red");
+	            		}
+	            		
+	            		$('#oldP').val("");
+	            		$('#newP').val("");
+	            		$('#confNewP').val("");
+	            }
+	        });
     }
 </script>
 
@@ -86,7 +103,7 @@
 		<br/>
 		New Password:<input type="password" id="newP" name="newPass">
 		<br/>
-		Confirm Password:<input type="password" name="confirmNewPass">
+		Confirm Password:<input type="password" id="confNewP" name="confirmNewPass">
 		<br/>
 		<button type="button" onclick="ajaxPassChange();" id="passChangeBtn">Submit</button>
 	</form>

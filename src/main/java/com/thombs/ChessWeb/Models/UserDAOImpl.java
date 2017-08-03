@@ -24,14 +24,14 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public User saveUser(User u) {
 		Session session = sessionFactory.getCurrentSession();
-		session.persist(u);
+		session.saveOrUpdate(u);
 		return u;
 	}
 
 	@Override
 	public List<User> getAllUsers() {
 		Session session = sessionFactory.getCurrentSession();
-		List<User> users = session.createQuery("from User").list();
+		List<User> users = session.createQuery("from User").getResultList();
 		return users;
 	}
 
