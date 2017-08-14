@@ -1,6 +1,9 @@
 *.class
 application.properties
-/target
+*/target/*
+*/target/**
+.classpath
+.project
 target/
 
 # Mobile Tools for Java (J2ME)
@@ -64,3 +67,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/.classpath
+/.settings/
