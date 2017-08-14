@@ -27,7 +27,7 @@ public class ChessAI implements Runnable{
 	
 	//@Autowired
 	//private UserService userService;
-	private ChessMatchmaking chessMatcher;
+	private ChessMatchmaking chessMM;
 	
 	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username, ChessMatchmaking chessMM)
 	{
@@ -35,7 +35,7 @@ public class ChessAI implements Runnable{
 		board = b;
 		this.msgTemplate = msgTemplate;
 		this.username = username;
-		chessMatcher = chessMM;
+		this.chessMM = chessMM;
 	}
 	
 	public void makeMove(){
@@ -119,7 +119,7 @@ public class ChessAI implements Runnable{
 				msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", jsonGameOver.toString());
 				
 				board.setWinner("AI");
-				chessMatcher.saveChessGame(board);
+				chessMM.saveChessGame(board);
 			}
 		}
 		catch(Exception e)

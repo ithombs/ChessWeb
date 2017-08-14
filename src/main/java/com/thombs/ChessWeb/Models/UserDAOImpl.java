@@ -2,7 +2,7 @@ package com.thombs.ChessWeb.Models;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO{
 	public User findByUsername(String username) {
 		Session session = sessionFactory.getCurrentSession();
 		Query q = session.createQuery("from User where username = :username");
-		q.setString("username", username);
+		q.setParameter("username", username);
 		User u = (User)q.uniqueResult();
 		return u;
 	}

@@ -761,7 +761,7 @@ function opponentSelect(val)
 	else
 	{
 		document.getElementById("queueBtn").style.display="none";
-		document.getElementById("concedeBtn").style.display="none";
+		document.getElementById("concedeBtn").style.display="inline";
 		
 		if(document.getElementById("ReconnectBtn") != null)
 			document.getElementById("ReconnectBtn").style.display="none";
