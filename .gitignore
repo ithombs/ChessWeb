@@ -63,3 +63,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.MF
+*.properties
+.settings/org.eclipse.wst.validation.prefs
+*.prefs
+*.classpath
