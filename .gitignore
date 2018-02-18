@@ -7,6 +7,8 @@ application.properties
 .settings
 ./settings/**
 target/
+bin/
+.settings/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
