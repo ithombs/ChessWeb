@@ -256,7 +256,6 @@ public class ChessBoard {
 		//find piece that is being moved
 		//NOTE: a new ChessPiece is created due to the fact that setting p = board[id] and subsequently changing p's properties will effect the board piece.
 		p = new ChessPiece(id, board[id].getType(), board[id].getSide(), 0,0, false);
-		//System.out.println("RECEIVE MOVE - Original Piece: "+ p.getType() + " " + p.getRow() + " " + p.getCol());
 		//If the player moved a valid piece then send it to the move method for additional validity checks
 		//This also makes sure the player moves their own piece
 		
@@ -269,18 +268,10 @@ public class ChessBoard {
 		{
 			p.setRow(toRow);
 			p.setCol(toCol);
-			//System.out.println("RECEIVE MOVE - Moved Piece: " + p.getType() + " " + p.getRow() + " " + p.getCol());
-			//check all possible moves from the moved piece. If it was valid then it returns TRUE.
-			//System.out.println("RECEIVE MOVE - board piece: " + board[id].toString());
-			
 			
 			ChessPiece c = isOccupied2(toRow, toCol);
 			if(move(p, true))
 			{
-				//System.out.println("---START THREATENED CHECK---");
-				//System.out.println(turn.toString() + " is in check: " + checkCheck());
-				//System.out.println("---END THREATENED CHECK---");
-				
 				return true;
 			}
 			else
@@ -359,7 +350,6 @@ public class ChessBoard {
 					{
 						if(p.getRow() + 1 == row && (p.getCol() + 1 == col || p.getCol() - 1 == col))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -367,7 +357,6 @@ public class ChessBoard {
 					{
 						if(p.getRow() - 1 == row && (p.getCol() + 1 == col || p.getCol() - 1 == col))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -378,7 +367,6 @@ public class ChessBoard {
 					{
 						if(!checkVerticalMovement(dummy))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -386,7 +374,6 @@ public class ChessBoard {
 					{
 						if(!checkHorizontalMovement(dummy))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -397,7 +384,6 @@ public class ChessBoard {
 					{
 						if(!checkDiagonalMovement(dummy))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -406,7 +392,6 @@ public class ChessBoard {
 				{
 					if(checkKnightMovement(dummy))
 					{
-						//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 						return true;
 					}
 				}
@@ -417,7 +402,6 @@ public class ChessBoard {
 					{
 						if(!checkHorizontalMovement(dummy))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}				
@@ -426,7 +410,6 @@ public class ChessBoard {
 					{
 						if(!checkVerticalMovement(dummy))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -435,7 +418,6 @@ public class ChessBoard {
 					{
 						if(!checkDiagonalMovement(dummy))
 						{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 						}
 					}
@@ -451,7 +433,6 @@ public class ChessBoard {
 					   row - 1 == p.getRow() && col + 1 == p.getCol() ||
 					   row - 1 == p.getRow() && col - 1 == p.getCol())
 					{
-							//System.out.println(p.getSide().toString() + " " + p.getType().toString() + " threatens.");
 							return true;
 					}
 				}
@@ -557,20 +538,14 @@ public class ChessBoard {
 				moveCheck.setRow(dummy.getRow() - 2);
 				if(move(moveCheck, false))
 				{
-					//System.out.println("double pawn move");
-					//System.out.println(moveCheck.toString());
 					validMoves.add(makeCopy(moveCheck));
-					//System.out.println(validMoves.get(0).toString());
 				}
 				
 				//Check forward movement 1 tile
 				moveCheck.setRow(dummy.getRow() - 1);
 				if(move(moveCheck, false))
 				{
-					//System.out.println("single pawn move");
-					//System.out.println(moveCheck.toString());
 					validMoves.add(makeCopy(moveCheck));
-					//System.out.println(validMoves.get(0).toString());
 				}
 
 				
@@ -578,7 +553,6 @@ public class ChessBoard {
 				moveCheck.setCol(dummy.getCol() - 1);
 				if(move(moveCheck, false))
 				{
-					//System.out.println("pawn attack left");
 					validMoves.add(makeCopy(moveCheck));
 				}
 				
@@ -586,7 +560,6 @@ public class ChessBoard {
 				moveCheck.setCol(dummy.getCol() + 1);
 				if(move(moveCheck, false))
 				{
-					//System.out.println("pawn attack right");
 					validMoves.add(makeCopy(moveCheck));
 				}
 				
@@ -668,7 +641,6 @@ public class ChessBoard {
 			if((moveCheck.getRow() >= 0 && moveCheck.getRow() <=7) && (moveCheck.getCol() >= 0 && moveCheck.getCol() <=7) && move(moveCheck,false))
 				validMoves.add(makeCopy(moveCheck));
 			
-			//System.out.println("POSSIBLE KNIGHT MOVES: " + validMoves.size());
 		}
 		else if(c.getType() == PieceType.QUEEN)
 		{
@@ -719,7 +691,6 @@ public class ChessBoard {
 			if(moveCheck.getRow() >= 0 && moveCheck.getCol() <= 7 && move(moveCheck, false))
 				validMoves.add(makeCopy(moveCheck));
 			
-			//System.out.println("POSSIBLE KING MOVES: " + validMoves.size());
 		}
 		
 		
@@ -736,49 +707,41 @@ public class ChessBoard {
 		if(board[c.getID()].getRow() - 2 == c.getRow() && board[c.getID()].getCol() - 1 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("1");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() - 1 == c.getRow() && board[c.getID()].getCol() - 2 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("2");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() + 1 == c.getRow() && board[c.getID()].getCol() - 2 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("3");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() + 2 == c.getRow() && board[c.getID()].getCol() - 1 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("4");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() + 2 == c.getRow() && board[c.getID()].getCol() + 1 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("5");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() + 1 == c.getRow() && board[c.getID()].getCol() + 2 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("6");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() - 1 == c.getRow() && board[c.getID()].getCol() + 2 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("7");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else if(board[c.getID()].getRow() - 2 == c.getRow() && board[c.getID()].getCol() + 1 == c.getCol())
 		{
 			goodMove = true;
-			//System.out.println("8");
 			p = isOccupied2(c.getRow(), c.getCol());
 		}
 		else
@@ -790,12 +753,10 @@ public class ChessBoard {
 		
 		if((p == null || p.getSide() != c.getSide()) && goodMove)
 		{
-			//System.out.println("good KNIGHT");
 			return true;
 		}
 		else
 		{
-			//System.out.println("bad KNIGHT");
 			return false;
 		}
 	}
@@ -971,14 +932,6 @@ public class ChessBoard {
 
 		for(int i = board[c.getID()].getCol() + 1; i <= 7; i++)
 		{
-			/*
-			if(isOccupied(i, c.getCol()))
-			{
-				if(isOccupied2(i, c.getCol()).getSide() != turn)
-					validMoves.add(c);
-				break;
-			}
-			*/
 			dummy.setCol(i);
 			if(move(dummy, false))
 				validMoves.add(makeCopy(dummy));
@@ -989,14 +942,6 @@ public class ChessBoard {
 
 		for(int i = board[c.getID()].getCol() - 1; i >= 0; i--)
 		{
-			/*
-			if(isOccupied(i, c.getCol()))
-			{
-				if(isOccupied2(i, c.getCol()).getSide() != turn)
-					validMoves.add(c);
-				break;
-			}
-			*/
 			dummy.setCol(i);
 			if(move(dummy, false))
 				validMoves.add(makeCopy(dummy));
@@ -1021,14 +966,6 @@ public class ChessBoard {
 
 		for(int i = board[c.getID()].getRow() + 1; i <= 7; i++)
 		{
-			/*
-			if(isOccupied(i, c.getCol()))
-			{
-				if(isOccupied2(i, c.getCol()).getSide() != turn)
-					validMoves.add(c);
-				break;
-			}
-			*/
 			dummy.setRow(i);
 			if(move(dummy, false))
 				validMoves.add(makeCopy(dummy));
@@ -1037,14 +974,6 @@ public class ChessBoard {
 
 		for(int i = board[c.getID()].getRow() - 1; i >= 0; i--)
 		{
-			/*
-			if(isOccupied(i, c.getCol()))
-			{
-				if(isOccupied2(i, c.getCol()).getSide() != turn)
-					validMoves.add(c);
-				break;
-			}
-			*/
 			dummy.setRow(i);
 			if(move(dummy, false))
 				validMoves.add(makeCopy(dummy));
@@ -1359,9 +1288,7 @@ public class ChessBoard {
 		
 		//BISHOP move checks
 		if(c.getType() == PieceType.BISHOP)
-		{
-			//ChessPiece p = isOccupied2(c.getRow(), c.getCol());
-			
+		{			
 			//check diagonal movements
 			if(board[c.getID()].getRow() - board[c.getID()].getCol() == c.getRow() - c.getCol() || board[c.getID()].getRow() + board[c.getID()].getCol() == c.getRow() + c.getCol())
 			{
@@ -1369,9 +1296,7 @@ public class ChessBoard {
 				{
 					if(!checkDiagonalMovement(c))
 					{
-						//p.setCaptured(true);
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 				else if(p == null)
@@ -1379,7 +1304,6 @@ public class ChessBoard {
 					if(!checkDiagonalMovement(c))
 					{
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 			}
@@ -1387,16 +1311,10 @@ public class ChessBoard {
 		
 		//KNIGHT move checks
 		if(c.getType() == PieceType.KNIGHT)
-		{
-			//ChessPiece p = isOccupied2(c.getRow(), c.getCol());
-			
-			
+		{			
 			if(checkKnightMovement(c))
 			{
-				//if(p != null && p.getSide() != c.getSide())
-					//p.setCaptured(true);
 				validMove = true;
-				//board[c.getID()] = c;
 			}
 		}
 		
@@ -1407,27 +1325,20 @@ public class ChessBoard {
 			
 			//QUEEN horizontal move
 			if(board[c.getID()].getRow() == c.getRow())
-			{
-				//System.out.println("MOVE - QUEEN VALIDATION - LATERAL MOVE");
-				
-				
+			{				
 				//TODO: Refactor to remove the initial SIDE check as they are unnecessary
 				if(p != null && p.getSide() != c.getSide()) //Attack move check
 				{
 					if(!checkHorizontalMovement(c))
 					{
-						//p.setCaptured(true);
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 				else if(p == null)
 				{
 					if(!checkHorizontalMovement(c))
 					{
-						//System.out.println("MOVE - QUEEN VALIDATION - NON CAPTURE LATERAL");
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}				
 			}
@@ -1438,9 +1349,7 @@ public class ChessBoard {
 				{
 					if(!checkVerticalMovement(c))
 					{
-						//p.setCaptured(true);
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 				else if(p == null)
@@ -1448,7 +1357,6 @@ public class ChessBoard {
 					if(!checkVerticalMovement(c))
 					{
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 			}
@@ -1458,9 +1366,7 @@ public class ChessBoard {
 				{
 					if(!checkDiagonalMovement(c))
 					{
-						//p.setCaptured(true);
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 				else if(p == null)
@@ -1468,7 +1374,6 @@ public class ChessBoard {
 					if(!checkDiagonalMovement(c))
 					{
 						validMove = true;
-						//board[c.getID()] = c;
 					}
 				}
 			}
@@ -1487,19 +1392,14 @@ public class ChessBoard {
 			   board[c.getID()].getRow() + 1 == c.getRow() && board[c.getID()].getCol() - 1 == c.getCol() ||
 			   board[c.getID()].getRow() - 1 == c.getRow() && board[c.getID()].getCol() + 1 == c.getCol() ||
 			   board[c.getID()].getRow() - 1 == c.getRow() && board[c.getID()].getCol() - 1 == c.getCol())
-			{
-				//ChessPiece p = isOccupied2(c.getRow(), c.getCol());
-				
+			{				
 				if(p == null)
 				{
 					validMove = true;
-					//board[c.getID()] = c;
 				}
 				else if(p != null && p.getSide() != c.getSide())
 				{
-					//p.setCaptured(true);
 					validMove = true;
-					//board[c.getID()] = c;
 				}
 			}
 			

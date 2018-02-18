@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,9 +57,10 @@ public class HomeController {
 	
 	@Autowired
 	private ChessGameService chessService;
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
+
+	@Autowired
+	private PasswordEncoder passEncoder;
+	
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -166,6 +168,7 @@ public class HomeController {
 	@RequestMapping("/profile")
 	public String userProfile(Model model, Principal principal){
 		User user = getCurrentUser(principal);
+		//logger.info(passEncoder.encode("testing"));
 		
 		List<ChessGame> games = chessService.getChessGamesByUser(user.getUserid());
 		
@@ -212,6 +215,23 @@ public class HomeController {
 		return "userCreation";
 	}
 	
+	@RequestMapping(value = "/passwordChange", method = RequestMethod.POST)
+	@ResponseBody
+	public String passwordChange(String oldP, String newP, String confNewP, Principal principal){
+		User u = getCurrentUser(principal);
+		boolean changed = false;
+		if(passEncoder.matches(oldP, u.getPassword()) && newP.equals(confNewP)){
+			u.setPassword(newP);
+			logger.info("New pass: " + newP);
+			changed = true;
+			u = userService.saveUser(u);
+		}
+		JSONObject json = new JSONObject();
+		json.put("result", changed);
+		
+		return json.toString();
+	}
+	
 	private User getCurrentUser(Principal principal){
 		Object u = ((Authentication) principal).getPrincipal();
 		if(u instanceof ChessUser){
@@ -220,16 +240,4 @@ public class HomeController {
 			return ((User)u);
 		}
 	}
-	
-	private String getPrincipal(){
-        String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
- 
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails)principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-        return userName;
-    }
 }

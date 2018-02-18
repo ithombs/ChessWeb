@@ -1,6 +1,14 @@
 *.class
 application.properties
-/target
+*/target/*
+*/target/**
+.classpath
+.project
+.settings
+./settings/**
+target/
+bin/
+.settings/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -63,8 +71,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-*.MF
-*.properties
-.settings/org.eclipse.wst.validation.prefs
-*.prefs
-*.classpath
+/.classpath
+/.settings/

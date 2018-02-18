@@ -155,12 +155,12 @@ public class ChessMatchmaking {
 			
 			if(correctSide && currentGame.receiveMove(pieceID, row, col)){
 				JSONObject jsonMoveSuccess = new JSONObject();
-    			jsonMoveSuccess.put("chessCommand", "move");
-    			jsonMoveSuccess.put("pieceID", pieceID);
-    			jsonMoveSuccess.put("row", row);
-    			jsonMoveSuccess.put("col", col);
-    			jsonMoveSuccess.put("ml1", previousPos.getRow()+ "|" + previousPos.getCol());
-    			jsonMoveSuccess.put("ml2", row+ "|" + col);
+    				jsonMoveSuccess.put("chessCommand", "move");
+    				jsonMoveSuccess.put("pieceID", pieceID);
+    				jsonMoveSuccess.put("row", row);
+    				jsonMoveSuccess.put("col", col);
+    				jsonMoveSuccess.put("ml1", previousPos.getRow()+ "|" + previousPos.getCol());
+    				jsonMoveSuccess.put("ml2", row+ "|" + col);
 				
 				if(opponent.equals("AI")){
         			msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonMoveSuccess.toString());
@@ -231,6 +231,33 @@ public class ChessMatchmaking {
 			
 		}else{
 			log.info("No game-in-progress found for [" + username +"]");
+		}
+	}
+	
+	public void concede(String username){
+		ChessBoard game = activeGames.get(username);
+		String opponent;
+		if(game != null){
+			if(game.getPlayer1().equals(username)){
+				opponent = game.getPlayer2();
+			}else{
+				opponent = game.getPlayer1();
+			}
+			game.setWinner(opponent);
+			activeGames.remove(game.getPlayer1());
+			activeGames.remove(game.getPlayer2());
+			
+			saveChessGame(game);
+			
+			JSONObject jsonGameOver = new JSONObject();
+			jsonGameOver.put("chessCommand", "gameOver");
+			jsonGameOver.put("winner", opponent);
+			msgTemplate.convertAndSendToUser(username, chessMsgDestination, jsonGameOver.toString());
+			if(!opponent.equals("AI")){
+				msgTemplate.convertAndSendToUser(opponent, chessMsgDestination, jsonGameOver.toString());
+			}
+			
+			log.info("Chess game conceded by [" + username + "]");
 		}
 	}
 	

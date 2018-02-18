@@ -111,5 +111,17 @@ public class ChessGame {
 		this.winner = winner;
 	}
 	
-	
+	public String getGameDescription(long playerID){
+		StringBuilder sb = new StringBuilder();
+		if(playerID == winner){
+			sb.append("W");
+		}else{
+			sb.append("L");
+		}
+		
+		sb.append(" - ");
+		sb.append(gameDate);
+		
+		return sb.toString();
+	}
 }
