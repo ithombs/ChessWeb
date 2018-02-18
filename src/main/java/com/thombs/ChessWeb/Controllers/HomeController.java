@@ -86,6 +86,7 @@ public class HomeController {
 		return game.getGameDate().toString();
 	}
 	
+	/*
 	@RequestMapping("/makeGame")
 	@ResponseBody
 	public String makeChessGameTest(){
@@ -115,6 +116,7 @@ public class HomeController {
 		
 		return "Game created!";
 	}
+	*/
 	
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request){
