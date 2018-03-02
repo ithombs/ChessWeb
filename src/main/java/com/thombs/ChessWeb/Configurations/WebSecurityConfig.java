@@ -45,7 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .permitAll();
     	
     	http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
+    	//http.headers().frameOptions().sameOrigin();
+    	http.csrf().disable();
     }
+    
+    
     
     @Bean
     public SessionRegistry sessionRegistry() {

@@ -17,16 +17,10 @@ public class ChessAI implements Runnable{
 
 	private int difficulty;
 	private ChessBoard board;
-	//WebSocketSession s;
 	String username;
 	SimpMessagingTemplate msgTemplate;
 	private static final Logger log = LoggerFactory.getLogger(ChessAI.class);
 	
-	//@Autowired
-	//private ChessGameService chessService;
-	
-	//@Autowired
-	//private UserService userService;
 	private ChessMatchmaking chessMM;
 	
 	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username, ChessMatchmaking chessMM)
@@ -149,10 +143,6 @@ public class ChessAI implements Runnable{
 	//ACTUAL AI METHOD
 	public ChessPiece aiMove1(ChessBoard b, int depth)
 	{
-		int pos = 0;
-		int num = 0;
-		int highScore = -1;
-		//List<ChessPiece> bestMoves = new ArrayList<ChessPiece>();
 		List<ChessPiece> possibleMoves = b.getPossibleMoves(b.getTurn());
 		Collections.shuffle(possibleMoves);
 		List<ScoredChessMove> moveScores = new ArrayList<ScoredChessMove>(possibleMoves.size());
@@ -173,133 +163,6 @@ public class ChessAI implements Runnable{
 		Collections.sort(moveScores, (m1, m2) -> m2.score - m1.score);
 		return moveScores.get(0).move;
 	}
-	/*
-	public ChessPiece aiMove2(ChessBoard b, int depth)
-	{
-		BestMove best = null;
-		
-		best = AB2(b, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-		
-		if(best.value == 0){
-			best.bestMove = randomMove(b.getPossibleMoves(b.getTurn()));
-		}
-		return best.bestMove;
-	}
-	*/
-	private int alphaBeta(ChessBoard b, int depth, int alpha, int beta, boolean computer)
-	{
-		int bestVal;
-		if(depth == 0 || b.isGameOver())
-		{
-			if(b.isGameOver())
-			{
-				return Integer.MAX_VALUE - 1000;
-			}else{
-				return evaluateBoard(b);
-			}
-		}
-		
-		if(computer)
-		{
-			bestVal = alpha;
-			
-			for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
-			{
-				ChessBoard newB = b.CopyChessBoard();
-				newB.move(c, true);
-				
-				int score = alphaBeta(newB, depth - 1, bestVal, beta, false);
-				bestVal = Math.max(score, bestVal);
-				
-				if(beta <= bestVal)
-					break;
-			}
-		}
-		else
-		{
-			bestVal = beta;
-			
-			for(ChessPiece c : b.getPossibleMoves(b.getTurn()))
-			{
-				ChessBoard newB = b.CopyChessBoard();
-				newB.move(c, true);
-				
-				int score = alphaBeta(newB, depth - 1, alpha, bestVal, true);
-				bestVal = Math.min(score, bestVal);
-				
-				if(bestVal <= alpha)
-					break;
-			}
-		}
-		
-		return bestVal;
-	}
-	
-	private int evaluateBoard(ChessBoard b)
-	{
-		int hueristicValue = 0;
-		
-		if(b.isCheckmate()){
-			hueristicValue = Integer.MAX_VALUE - 100;
-		} else if(b.isOpponentInCheck()){
-			hueristicValue = 1000;
-		}
-		
-		for(ChessPiece c : b.getBoard())
-		{
-			if(c.isCaptured())
-				continue;
-			if(c.getSide() == b.getTurn())
-			{
-				if(c.getType() == PieceType.PAWN)
-				{
-					hueristicValue += 1;
-				}
-				else if(c.getType() == PieceType.KNIGHT)
-				{
-					hueristicValue += 3;
-				}
-				else if(c.getType() == PieceType.BISHOP)
-				{
-					hueristicValue += 3;
-				}
-				else if(c.getType() == PieceType.ROOK)
-				{
-					hueristicValue += 5;
-				}
-				else if(c.getType() == PieceType.QUEEN)
-				{
-					hueristicValue += 9;
-				}
-			}
-			else
-			{
-				if(c.getType() == PieceType.PAWN)
-				{
-					hueristicValue -= 1;
-				}
-				else if(c.getType() == PieceType.KNIGHT)
-				{
-					hueristicValue -= 3;
-				}
-				else if(c.getType() == PieceType.BISHOP)
-				{
-					hueristicValue -= 3;
-				}
-				else if(c.getType() == PieceType.ROOK)
-				{
-					hueristicValue -= 5;
-				}
-				else if(c.getType() == PieceType.QUEEN)
-				{
-					hueristicValue -= 9;
-				}
-			}
-		}
-		
-		return hueristicValue;
-	}
-	
 	
 	//For testing
 	public static void main(String args[])
@@ -311,27 +174,6 @@ public class ChessAI implements Runnable{
 		
 		System.out.println(b.getPiece(8).isCaptured());
 		System.out.println(c.getPiece(8).isCaptured());
-		
-		//System.out.println(aiMove2(b, 5));
-		
-		/*
-		for(ChessPiece cp: b.getPossibleMoves(b.getTurn()))
-		{
-			ChessBoard bb = b.CopyChessBoard();
-			bb.move(cp, true);
-			System.out.println(alphaBeta(bb.CopyChessBoard(), 8, Integer.MIN_VALUE, Integer.MAX_VALUE, true));
-		}
-		*/
-		//System.out.println(aiMove1(b));
-		
-		
-		/*
-		for(ChessPiece c : b.checkPossibleMovements(b.getPiece(16)))
-		{
-			System.out.println(c.getID() + "|" + c.getRow() + "|" + c.getCol());
-		}
-		*/
-		//ChessAI.randomMove(b.getPossibleMoves(b.getTurn()));
 	}
 
 	

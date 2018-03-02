@@ -11,16 +11,18 @@
 <script type="text/javascript"
     src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript">
-    function ajaxTest(id) {
-        $.ajax({
-            url : 'ajaxChessMoveList?id=' + id,
-            success : function(data) {
-            	console.log(data);
-            	setReplayMoveList(data);
-            	replayButtonControl();
-                //$('#result').text(data);
-            }
-        });
+    function fetchOldGame(id) {
+    	if (id != ""){
+    		$.ajax({
+                url : 'ajaxChessMoveList?id=' + id,
+                success : function(data) {
+                	console.log(data);
+                	setReplayMoveList(data);
+                	replayButtonControl();
+                    //$('#result').text(data);
+                }
+            });
+    	}
     }
 </script>
 
@@ -63,7 +65,7 @@
 <button id="replayBack" accesskey="a" onClick="moveBackward()">Back</button>
 
 
-<select id="gameReplayIDs" onChange='ajaxTest(this.value)' size="10">
+<select id="gameReplayIDs" onChange='fetchOldGame(this.value)' size="10">
 	<option value="" selected="selected">Select a game</option>
 	
 	<c:forEach var="id" items="${gameIDs}" varStatus="loopCounter">

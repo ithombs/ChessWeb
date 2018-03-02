@@ -7,7 +7,7 @@ import java.util.Random;
 
 /* ---Notes---
  * The coordinates of the chess pieces are from normal array representation(0,0 being the top left of the board)
- * rather than what a chess board is normal read as(a/0,0 being the bottom left	) 
+ * rather than what a chess board is normally read as(a/0,0 being the bottom left	) 
  * 
  * 
  */

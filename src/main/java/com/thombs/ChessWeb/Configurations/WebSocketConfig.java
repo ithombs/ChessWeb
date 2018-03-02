@@ -12,11 +12,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
 		config.enableSimpleBroker("/topic", "/queue");
-		config.setApplicationDestinationPrefixes("/chess");
+		config.setApplicationDestinationPrefixes("/chess");	
 	}
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		//Use this as the URL on the client side
 		registry.addEndpoint("/chessEndpoint").withSockJS();
+
 	}
 }
