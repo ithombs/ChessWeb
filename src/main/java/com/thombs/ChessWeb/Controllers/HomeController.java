@@ -30,14 +30,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.thombs.ChessWeb.DataAccess.ChessGameService;
+import com.thombs.ChessWeb.DataAccess.UserService;
 import com.thombs.ChessWeb.Models.ChessGame;
-import com.thombs.ChessWeb.Models.ChessGameService;
 import com.thombs.ChessWeb.Models.ChessGameUtils;
 import com.thombs.ChessWeb.Models.ChessMove;
 import com.thombs.ChessWeb.Models.ChessUser;
 import com.thombs.ChessWeb.Models.Role;
 import com.thombs.ChessWeb.Models.User;
-import com.thombs.ChessWeb.Models.UserService;
 import com.thombs.ChessWeb.Models.UserValidator;
 
 

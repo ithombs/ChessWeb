@@ -24,6 +24,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 
+import com.thombs.ChessWeb.DataAccess.ChessGameService;
+import com.thombs.ChessWeb.DataAccess.UserService;
 import com.thombs.ChessWeb.Models.ChessAI;
 import com.thombs.ChessWeb.Models.ChessBoard;
 import com.thombs.ChessWeb.Models.Side;
