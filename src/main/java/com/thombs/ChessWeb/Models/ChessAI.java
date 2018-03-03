@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
@@ -46,7 +47,7 @@ public class ChessAI implements Runnable{
 		//random move level
 		if(difficulty == 0)
 		{
-			aiMove = randomMove(board.getPossibleMoves(board.getTurn()));
+			aiMove = getRandomMove(board.getPossibleMoves(board.getTurn()));
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -56,10 +57,9 @@ public class ChessAI implements Runnable{
 			else
 				return;
 		}
-		//Alpha beta pruning depth 4
 		else if(difficulty == 1)
 		{		
-			aiMove = aiMove1(board, 3);
+			aiMove = findBestMove(board);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -69,10 +69,9 @@ public class ChessAI implements Runnable{
 			else
 				return;
 		}
-		//depth of 8
 		else if(difficulty == 2)
 		{
-			aiMove = aiMove1(board, 5);
+			aiMove = findBestMove(board);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -84,7 +83,7 @@ public class ChessAI implements Runnable{
 		}
 		else if(difficulty == 3)
 		{
-			aiMove = aiMove1(board, 7);
+			aiMove = findBestMove(board);
 			if(aiMove != null)
 			{
 				prevR = board.getPiece(aiMove.getID()).getRow();
@@ -126,7 +125,7 @@ public class ChessAI implements Runnable{
 	}
 	
 	//Very basic 'AI'. Picks a random valid move and takes it
-	public ChessPiece randomMove(ArrayList<ChessPiece> possibleMoves)
+	public ChessPiece getRandomMove(ArrayList<ChessPiece> possibleMoves)
 	{
 		ChessPiece move = null;
 		
@@ -141,7 +140,7 @@ public class ChessAI implements Runnable{
 	}
 	
 	//ACTUAL AI METHOD
-	public ChessPiece aiMove1(ChessBoard b, int depth)
+	public ChessPiece findBestMove(ChessBoard b)
 	{
 		List<ChessPiece> possibleMoves = b.getPossibleMoves(b.getTurn());
 		Collections.shuffle(possibleMoves);
@@ -150,7 +149,7 @@ public class ChessAI implements Runnable{
 		
 		for(ChessPiece cp: possibleMoves)
 		{
-			executorService.execute(new SubMove(moveScores, cp, b.CopyChessBoard(), depth));
+			executorService.execute(new SubMove(moveScores, cp, b.CopyChessBoard(), 3));
 		}
 		
 		try{
@@ -161,7 +160,36 @@ public class ChessAI implements Runnable{
 		}
 		
 		Collections.sort(moveScores, (m1, m2) -> m2.score - m1.score);
-		return moveScores.get(0).move;
+		
+		/*
+		 * Choose a move based on the level of the AI
+		 * 
+		 * Level 3 - Always choose the best move
+		 * Level 2 - Choose the best move half the time
+		 * Level 1 - 25% chance to choose the best move
+		 */
+		ChessPiece move = null;
+		if(b.getAiLevel() >= 3) {
+			move = moveScores.get(0).move;
+		}else if(b.getAiLevel() == 2) {
+			int rand = ThreadLocalRandom.current().nextInt(2);
+			if(rand == 0) {
+				move = moveScores.get(0).move;
+			}else {
+				rand = ThreadLocalRandom.current().nextInt(moveScores.size() / 2);
+				move = moveScores.get(rand).move;
+			}
+		}else if(b.getAiLevel() == 1) {
+			int rand = ThreadLocalRandom.current().nextInt(4);
+			if(rand == 0) {
+				move = moveScores.get(0).move;
+			}else {
+				rand = ThreadLocalRandom.current().nextInt(moveScores.size());
+				move = moveScores.get(rand).move;
+			}
+		}
+		
+		return move;
 	}
 	
 	//For testing

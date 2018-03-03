@@ -76,7 +76,7 @@ public class ChessController {
 				}
 				break;
 			case "move":
-				logger.info("ChessCommand [move] recieved from " + user.getName() + ": " + jsonMsg);
+				//logger.info("ChessCommand [move] recieved from " + user.getName() + ": " + jsonMsg);
 				chessMM.makeMove(user.getName(), jsonMsg);
 				break;
 			case "reconnect":

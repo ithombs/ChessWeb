@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan({"com.thombs.ChessWeb"})
+@ComponentScan({"com.thombs.ChessWeb.*"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	//@Autowired
