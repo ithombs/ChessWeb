@@ -165,7 +165,7 @@ public class ChessAI implements Runnable{
 		 * Choose a move based on the level of the AI
 		 * 
 		 * Level 3 - Always choose the best move
-		 * Level 2 - Choose the best move half the time
+		 * Level 2 - Choose the best move half the time (choose randomly from upper half of moves list otherwise)
 		 * Level 1 - 25% chance to choose the best move
 		 */
 		ChessPiece move = null;
