@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thombs.ChessWeb.Models.ChessGame;
+import com.thombs.ChessWeb.Models.Leaderboard;
 
 @Service("ChessGameService")
 public class ChessGameServiceImpl implements ChessGameService{
@@ -38,4 +39,9 @@ public class ChessGameServiceImpl implements ChessGameService{
 		return chessDAO.getChessGamesByUser(userID);
 	}
 
+	@Override
+	@Transactional
+	public List<Leaderboard> getLeaderboard() {
+		return chessDAO.getLeaderboard();
+	}
 }

@@ -55,12 +55,12 @@
 	<tr>
 		<th>Rank</th><th>Username</th><th>Wins</th><th>Win Ratio</th>
 	</tr>
-	<c:forEach var="user" items="${leaderBoard}" varStatus="loopCounter">
+	<c:forEach var="user" items="${leaderboard}" varStatus="loopCounter">
 	<tr>
 		<td><c:out value="${loopCounter.index + 1}"/></td>
-		<td><c:out value='${user.split(" ")[0]}'/></td>
-		<td><c:out value='${user.split(" ")[1]}'/></td>
-		<td><fmt:formatNumber value="${user.split(' ')[2]}" type="percent"/></td>
+		<td><c:out value='${user.username}'/></td>
+		<td><c:out value='${user.wins}'/></td>
+		<td><c:out value="${user.winPercentage}%"/></td>
 	</tr>
 	</c:forEach>
 </table>

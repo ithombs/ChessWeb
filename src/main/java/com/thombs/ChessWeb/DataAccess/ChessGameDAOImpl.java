@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.thombs.ChessWeb.Models.ChessGame;
+import com.thombs.ChessWeb.Models.Leaderboard;
 
 @Repository
 public class ChessGameDAOImpl implements ChessGameDAO{
@@ -45,4 +46,11 @@ public class ChessGameDAOImpl implements ChessGameDAO{
 		return games;
 	}
 	
+	@Override
+	public List<Leaderboard> getLeaderboard(){
+		Session session = sessionFactory.getCurrentSession();
+		Query q = session.createQuery("from Leaderboard");
+		List<Leaderboard> leaderboard = q.getResultList();
+		return leaderboard;
+	}
 }

@@ -34,6 +34,7 @@ import com.thombs.ChessWeb.Models.ChessGame;
 import com.thombs.ChessWeb.Models.ChessGameUtils;
 import com.thombs.ChessWeb.Models.ChessMove;
 import com.thombs.ChessWeb.Models.ChessUser;
+import com.thombs.ChessWeb.Models.Leaderboard;
 import com.thombs.ChessWeb.Models.Role;
 import com.thombs.ChessWeb.Models.User;
 import com.thombs.ChessWeb.Models.UserValidator;
@@ -72,6 +73,8 @@ public class HomeController {
 		model.addAttribute("serverTime", formattedDate );
 		model.addAttribute("users", users);
 		
+		List<Leaderboard> leaderboard = chessService.getLeaderboard();
+		model.addAttribute("leaderboard", leaderboard);
 		//logger.info(passwordEncoder.encode("testing"));
 		
 		return "home";

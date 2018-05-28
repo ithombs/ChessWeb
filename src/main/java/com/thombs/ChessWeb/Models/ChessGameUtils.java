@@ -2,7 +2,7 @@ package com.thombs.ChessWeb.Models;
 
 import java.util.List;
 
-public class ChessGameUtils {
+public class  ChessGameUtils {
 	public static int getNumWins(List<ChessGame> games, long userID){
 		int numWins = 0;
 		
