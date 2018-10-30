@@ -31,8 +31,6 @@ function initStompChannels(){
 	    });
 		
 		stompClient.subscribe('/user/queue/chessMsg', function (msg) {
-	        //alert(msg);
-	        //console.log(msg);
 	        msg = JSON.parse(msg.body);
 	        if(msg.chessCommand == "gameStart"){
 	        	startGame(msg);
@@ -234,21 +232,14 @@ function drop(ev) {
     	 moveTo = ev.target.id;
     	 //tileTo = ev.target.title;
     }
-    //console.log("MOVETO: " + moveTo);
-    //console.log(isNaN(moveTo));
+
     //check if the ID of the element is a number (the IDs of the tiles are not truly numbers due to use of the pipe character)
     sendMove();
 }
-/*
-function boardClick(id)
-{
-	alert(id);
-}
-*/
+
 function createBoard()
 {
 	var board = document.getElementById("board");
-	//board.addEventListener("Onclick", boardClick(this.id));
 	
 	for(var i = 0; i < 8; i++)
 	{
@@ -263,9 +254,6 @@ function createBoard()
             cell.id = idStr;
             cell.style.backgroundColor = 'blue';
             cell.style.color = 'white';
-            //cell.addEventListener("click", boardClick(id), false);
-            //cell.style.height = '50px';
-            //cell.style.width = '50px';
 		}
 	}
 }
@@ -289,12 +277,8 @@ function initPieces()
 		x.style.maxWidth = "100%"
 		x.style.margin = "auto auto auto auto";
 		
-		//x.addEventListener('dragstart', function() {drag(event)}, false);
 		x.addEventListener('dragstart', drag, false);
-		//document.getElementById("1|2").appendChild(x);
 		
-		//console.log(x);
-		//console.log(x.id);
 		x.id = (parseInt(x.id) + i).toString();
 		
 		document.getElementById(1 + "|" + col++).appendChild(x);
@@ -315,12 +299,8 @@ function initPieces()
 		x.style.maxWidth = "100%"
 		x.style.margin = "auto";
 		
-		//x.addEventListener('dragstart', function() {drag(event)}, false);
 		x.addEventListener('dragstart', drag, false);
-		//document.getElementById("1|2").appendChild(x);
 		
-		//console.log(x);
-		//console.log(x.id);
 		x.id = (parseInt(x.id) + i).toString();
 		
 		document.getElementById(6 + "|" + col++).appendChild(x);
@@ -587,8 +567,6 @@ function removePieces()
 
 function concede(player)
 {
-	//socket.send("surr:" + player);
-	//TODO: Modify this to use the correct format
 	var json = new Object();
 	json.chessCommand = "concede";
 	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json));
@@ -599,7 +577,6 @@ function concede(player)
  */ 
 function initReplay()
 {
-	//console.log("hit initReplay");
 	prevPositions = [];
 	var i;
 	var prevTile;
@@ -613,7 +590,6 @@ function initReplay()
 		prevPositions[i] = piece + "|" + prevTile;
 		moveForward();
 	}
-	//console.log("previousList: " + prevPositions);
 	buildReplayMoveList();
 	
 	removePieces();
@@ -625,8 +601,6 @@ function initReplay()
  */
 function setReplayMoveList(moveList)
 {
-	
-	//console.log("hit setMoveList");
 	mlIndex = 0;
 	replayMoveList = [];
 	prevPositions = [];
@@ -636,10 +610,8 @@ function setReplayMoveList(moveList)
 	}
 	replayMoveList.pop();
 	initReplay();
-	//removePieces();
 	initPieces();
 	document.getElementById("replayBack").disabled = true;
-	//replayButtonControl();
 }
 
 /*
@@ -649,9 +621,7 @@ function moveForward()
 {
 	var piece, tile;
 	piece = JSON.parse(replayMoveList[mlIndex].move).pieceID;
-	tile = JSON.parse(replayMoveList[mlIndex].move).row +"|"+ JSON.parse(replayMoveList[mlIndex].move).col;
-	//console.log("Replay move: " + piece + " to " + tile)
-	
+	tile = JSON.parse(replayMoveList[mlIndex].move).row +"|"+ JSON.parse(replayMoveList[mlIndex].move).col;	
 	
 	if(mlIndex < replayMoveList.length)
 	{
@@ -671,7 +641,6 @@ function moveBackward()
 	var parentEle;
 	piece = prevPositions[mlIndex].split("|")[0];
 	tile = prevPositions[mlIndex].split("|")[1] +"|"+ prevPositions[mlIndex].split("|")[2];
-	//console.log("Replay move: " + piece + " to " + tile)
 	
 	//TODO: Find bug that happens when switching to different matches(a piece will skip moves and shift back to home position)
 	parentEle = document.getElementById(piece).parentElement;
@@ -685,7 +654,6 @@ function moveBackward()
 
 /*
  * helper function that disables and enables the backwards and forwards buttons when they are unusable
- * TODO: fix the forward button disabling
  */
 function replayButtonControl()
 {
@@ -728,14 +696,10 @@ function buildReplayMoveList()
 		var moveJSON = JSON.parse(replayMoveList[i].move);
 		
 		fromID = prevPositions[i].substr(prevPositions[i].indexOf("|") + 1);
-		toID = moveJSON.row + "|" + moveJSON.col;
-		
-		//toID = replayMoveList[i].substr(replayMoveList[i].indexOf("|") + 1);
-		
+		toID = moveJSON.row + "|" + moveJSON.col;		
 		
 		from = document.getElementById(fromID).title;
 		to = document.getElementById(toID).title;
-		//console.log(from + " TO " + to);
 		if(i % 2 == 0)
 			document.getElementById("moveList").innerHTML += "<span class='whiteMove'>" +from + " - " + to + "</span><br>";
 		else
