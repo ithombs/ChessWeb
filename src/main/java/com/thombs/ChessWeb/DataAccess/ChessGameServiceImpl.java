@@ -16,13 +16,13 @@ public class ChessGameServiceImpl implements ChessGameService{
 	ChessGameDAO chessDAO;
 	
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public ChessGame getChessGameByID(int id) {
 		return chessDAO.findGameByID(id);
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<ChessGame> getAllChessGames() {
 		return chessDAO.getAllChessGames();
 	}
@@ -34,13 +34,13 @@ public class ChessGameServiceImpl implements ChessGameService{
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<ChessGame> getChessGamesByUser(long userID) {
 		return chessDAO.getChessGamesByUser(userID);
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Leaderboard> getLeaderboard() {
 		return chessDAO.getLeaderboard();
 	}

@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.thombs.ChessWeb.Aspect.LoggerTest;
 import com.thombs.ChessWeb.Models.User;
 
 @Service("UserService")
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@Transactional
+	@LoggerTest(level = 0)
 	public User getUser(int id) {
 		User u = userDAO.findByID(id);
 		return u;
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@Transactional
+	@LoggerTest(level = 1)
 	public User getUser(String username) {
 		User u = userDAO.findByUsername(username);
 		return u;

@@ -10,7 +10,7 @@
 	<properties>
 		<java-version>1.8.112</java-version>
 		<org.springframework-version>5.0.4.RELEASE</org.springframework-version>
-		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<org.aspectj-version>1.8.9</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 		<!-- Hibernate -->
 		<hibernate.version>5.2.6.Final</hibernate.version>
@@ -149,6 +149,23 @@
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
 		</dependency>	
+		<dependency>
+		    <groupId>org.aspectj</groupId>
+		    <artifactId>aspectjtools</artifactId>
+		    <version>${org.aspectj-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.aspectj</groupId>
+		    <artifactId>aspectjweaver</artifactId>
+		    <version>${org.aspectj-version}</version>
+		</dependency>
+		
+		<!-- Rabbit libs -->
+		<dependency>
+		    <groupId>com.rabbitmq</groupId>
+		    <artifactId>amqp-client</artifactId>
+		    <version>5.5.0</version>
+		</dependency>
 		
 		<!-- Logging -->
 		<dependency>

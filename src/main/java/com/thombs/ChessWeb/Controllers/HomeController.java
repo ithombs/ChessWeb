@@ -22,12 +22,15 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.thombs.ChessWeb.Aspect.LoggerTest;
 import com.thombs.ChessWeb.DataAccess.ChessGameService;
 import com.thombs.ChessWeb.DataAccess.UserService;
 import com.thombs.ChessWeb.Models.ChessGame;
@@ -61,6 +64,7 @@ public class HomeController {
 	private PasswordEncoder passEncoder;
 	
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
+	@LoggerTest(level = 0)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -119,6 +123,7 @@ public class HomeController {
 	}
 	*/
 	
+	@LoggerTest(level = 0)
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request){
 		logger.info("Login page hit");
@@ -183,8 +188,7 @@ public class HomeController {
 		return "chessProfile";
 	}
 	
-	@RequestMapping(value = "/404")
-	@ResponseBody
+	@ExceptionHandler(NoHandlerFoundException.class)
 	public String errors()
 	{
 		return "404";
