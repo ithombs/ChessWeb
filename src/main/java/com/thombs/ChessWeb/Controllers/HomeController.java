@@ -64,7 +64,7 @@ public class HomeController {
 	private PasswordEncoder passEncoder;
 	
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-	@LoggerTest(level = 0)
+	@LoggerTest(level = 0, activityName = "Hit Start Page")
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		

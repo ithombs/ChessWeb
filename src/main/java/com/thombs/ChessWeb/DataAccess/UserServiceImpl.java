@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@Transactional
-	@LoggerTest(level = 1)
+	@LoggerTest(level = 1, activityName = "Retrived User")
 	public User getUser(String username) {
 		User u = userDAO.findByUsername(username);
 		return u;

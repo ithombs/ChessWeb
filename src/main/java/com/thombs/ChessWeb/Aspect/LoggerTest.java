@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface LoggerTest {
 	public int level() default 0;
+	public String activityName() default "";
 }

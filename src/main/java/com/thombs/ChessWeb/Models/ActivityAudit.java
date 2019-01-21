@@ -19,14 +19,14 @@ public class ActivityAudit {
 	@Column(name = "id")
 	private long id;
 	
-	@Column(name="startTime")
+	@Column(name="starttime")
 	private Timestamp startTime;
 	
-	@Column(name="endTime")
+	@Column(name="endtime")
 	private Timestamp endTime;
 	
 	@NotNull
-	@Column(name="activityName")
+	@Column(name="activityname")
 	private String activityName;
 	
 	public ActivityAudit() {
