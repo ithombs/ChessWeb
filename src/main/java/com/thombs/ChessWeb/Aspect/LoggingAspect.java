@@ -25,13 +25,6 @@ public class LoggingAspect {
 	@Autowired
 	private ActivityAuditService aaService;
 	
-/*	@Pointcut("@annotation(level)")
-    public void annotationPointCutDefinition(LoggerTest level){
-    }
-	
-	@Pointcut("execution(* *(..))")
-    public void atExecution(){}
-*/
 	
 	@Around("@annotation(level)")
     public Object aroundAdvice(ProceedingJoinPoint joinPoint, LoggerTest level) throws Throwable {
@@ -45,9 +38,9 @@ public class LoggingAspect {
                 logger.info("Logging from - [" + joinPoint.getSignature().getName() + "] - START");
                 aa.setStartTime(new Timestamp(System.currentTimeMillis()));
                 aa.setActivityName(level.activityName());
-                //We choose to continue the call to the method in question
+                
                 returnObject = joinPoint.proceed();
-                //If no exception is thrown we should land here and we can modify the returnObject, if we want to.
+                
                 aa.setEndTime(new Timestamp(System.currentTimeMillis()));
                 aaService.saveActivityAudit(aa);
             } catch (Throwable throwable) {
@@ -64,13 +57,4 @@ public class LoggingAspect {
             return joinPoint.proceed();
         }
     }
- 
-    /*
-     * @After("annotationPointCutDefinition(level) && atExecution()")
-    //JointPoint = the reference of the call to the method
-    public void printNewLine(JoinPoint pointcut, LoggerTest level){
-        //Just prints new lines after each method that's executed in
-        System.out.print("\n\r");
-    }
-    */
 }

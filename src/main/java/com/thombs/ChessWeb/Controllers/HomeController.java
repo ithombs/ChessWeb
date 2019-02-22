@@ -72,14 +72,13 @@ public class HomeController {
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		
 		String formattedDate = dateFormat.format(date);
-		//User u = userService.getUser("it");
+		
 		List<User> users = userService.getAllUsers();
 		model.addAttribute("serverTime", formattedDate );
 		model.addAttribute("users", users);
 		
 		List<Leaderboard> leaderboard = chessService.getLeaderboard();
 		model.addAttribute("leaderboard", leaderboard);
-		//logger.info(passwordEncoder.encode("testing"));
 		
 		return "home";
 	}
