@@ -29,12 +29,10 @@
 </head>
 <body>
 
-<div id="topBarContainer" style="height:100px; width:1000px; border:1px solid; margin:auto; background-color:cyan;">
-	
-	
+<div id="topBarContainer" style="height:100px; width:1000px; border:1px solid; margin:auto;">
 	<%@ include file="loginForm.jsp" %>
 	
-	<div id="menuContainer" style="height:50px; margin: 50px auto auto auto; background-color:grey;">
+	<div id="menuContainer" style="height:50px; margin: 50px auto auto auto;">
 		<%@ include file="topNavBar.jsp" %>
 	</div>
 </div>

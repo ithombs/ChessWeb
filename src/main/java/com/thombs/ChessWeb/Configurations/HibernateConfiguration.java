@@ -43,16 +43,13 @@ public class HibernateConfiguration {
 	    	try{
 	    		ComboPooledDataSource dataSource = new ComboPooledDataSource();
 		    	dataSource.setDriverClass(environment.getRequiredProperty("jdbc.driverClassName"));
-		        //dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
 		        dataSource.setJdbcUrl(environment.getRequiredProperty("jdbc.url"));
-		    	//dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
 		        dataSource.setUser(environment.getRequiredProperty("jdbc.username"));
-		        //dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
 		        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-		        //dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
 		        dataSource.setMaxPoolSize(10);
 		        dataSource.setMaxStatements(50);
 		        dataSource.setMinPoolSize(3);
+		        //dataSource.setProperties(hibernateProperties());
 		        return dataSource;
 	    	}catch(Exception e){
 	    		throw new RuntimeException(e);
@@ -65,10 +62,10 @@ public class HibernateConfiguration {
 	        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
 	        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
 	        properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
-	        //properties.put("hibernate.c3p0.min_size", environment.getRequiredProperty("hibernate.c3p0.min_size"));
-	        //properties.put("hibernate.c3p0.max_size", environment.getRequiredProperty("hibernate.c3p0.max_size"));
-	        //properties.put("hibernate.c3p0.timeout", environment.getRequiredProperty("hibernate.c3p0.timeout"));
-	        //properties.put("hibernate.c3p0.max_statements", environment.getRequiredProperty("hibernate.c3p0.max_statements"));
+	        properties.put("hibernate.c3p0.min_size", environment.getRequiredProperty("hibernate.c3p0.min_size"));
+	        properties.put("hibernate.c3p0.max_size", environment.getRequiredProperty("hibernate.c3p0.max_size"));
+	        properties.put("hibernate.c3p0.timeout", environment.getRequiredProperty("hibernate.c3p0.timeout"));
+	        properties.put("hibernate.c3p0.max_statements", environment.getRequiredProperty("hibernate.c3p0.max_statements"));
 	        return properties;        
 	    }
 	     
