@@ -11,9 +11,9 @@
 <title>User Creation</title>
 </head>
 <body>
-<div id="topBarContainer" style="height:100px; width:1000px; border:1px solid; margin:auto; background-color:cyan;">
+<div id="topBarContainer" style="height:100px; width:1000px; border:1px solid; margin:auto;">
 <h1 style="margin:auto auto auto auto; float:left;">Chess Web</h1>
-	<div id="menuContainer" style="height:50px; margin: 50px auto auto auto; background-color:grey;">
+	<div id="menuContainer" style="height:50px; margin: 50px auto auto auto;">
 		<ul id="mainMenuBar">
 			<li class="mainMenuItem" onclick="location.href='home'">
 				<p onclick="location.href='home'">Home</p>
