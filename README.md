@@ -3,21 +3,25 @@ Version 1.1 of ChessWeb. This time using Hibernate and other useful Spring tools
 
 This project is mostly a sandbox for prototyping, sketching out, and implementing various pieces of functionality that I come across that interest me. Points of interest within the project are as follows:
 
-1. Basic usage of Spring functionality
-  * Login security..
-  * User management..
-  * Web socket usage..
-  * CRUD functionality via JPA and Hibernate..
-  * Aspect oriented programming..
+* Basic usage of Spring functionality
+   * Login security
+   * User management
+   * Web socket usage
+   * CRUD functionality via JPA and Hibernate
+   * Aspect oriented programming
 
-2. Simple AI
-  * Min-Max algorithm based AI as chess opponent
+* Simple AI
+   * Min-Max algorithm based AI as chess opponent
 
-3. Connecting with outside systems
-  * RabbitMQ used as a message broker for web sockets(STOMP) used to communicate between a client and server for chess match information
+* Connecting with outside systems
+   * RabbitMQ used as a message broker for web sockets(STOMP) used to communicate between a client and server for chess match information
 
-IMPORTANT NOTE:
+
+
+
+##IMPORTANT NOTE##
 The application.properties file is ommitted from the repository on purpose. In order to fully run the application, besides requiring other pieces such as a database and RabbitMQ, you need to create and fill out an application.properties file with the following keys.
+
 
 jdbc.driverClassName=
 
