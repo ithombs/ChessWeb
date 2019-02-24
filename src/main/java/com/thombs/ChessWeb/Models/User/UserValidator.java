@@ -1,4 +1,4 @@
-package com.thombs.ChessWeb.Models;
+package com.thombs.ChessWeb.Models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.thombs.ChessWeb.DataAccess.UserService;
+import com.thombs.ChessWeb.DataAccess.User.UserService;
 
 @Component
 public class UserValidator implements Validator {

@@ -1,4 +1,4 @@
-package com.thombs.ChessWeb.DataAccess;
+package com.thombs.ChessWeb.DataAccess.User;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.thombs.ChessWeb.Models.User;
+import com.thombs.ChessWeb.Models.User.User;
 
 @Repository
 public class UserDAOImpl implements UserDAO{

@@ -1,4 +1,4 @@
-package com.thombs.ChessWeb.DataAccess;
+package com.thombs.ChessWeb.DataAccess.User;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thombs.ChessWeb.Aspect.LoggerTest;
-import com.thombs.ChessWeb.Models.User;
+import com.thombs.ChessWeb.Models.User.User;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService{

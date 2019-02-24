@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,16 +31,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.thombs.ChessWeb.Aspect.LoggerTest;
-import com.thombs.ChessWeb.DataAccess.ChessGameService;
-import com.thombs.ChessWeb.DataAccess.UserService;
-import com.thombs.ChessWeb.Models.ChessGame;
-import com.thombs.ChessWeb.Models.ChessGameUtils;
-import com.thombs.ChessWeb.Models.ChessMove;
-import com.thombs.ChessWeb.Models.ChessUser;
+import com.thombs.ChessWeb.DataAccess.Chess.ChessGameService;
+import com.thombs.ChessWeb.DataAccess.User.UserService;
 import com.thombs.ChessWeb.Models.Leaderboard;
-import com.thombs.ChessWeb.Models.Role;
-import com.thombs.ChessWeb.Models.User;
-import com.thombs.ChessWeb.Models.UserValidator;
+import com.thombs.ChessWeb.Models.Chess.ChessGame;
+import com.thombs.ChessWeb.Models.Chess.ChessGameUtils;
+import com.thombs.ChessWeb.Models.Chess.ChessMove;
+import com.thombs.ChessWeb.Models.User.ChessUser;
+import com.thombs.ChessWeb.Models.User.Role;
+import com.thombs.ChessWeb.Models.User.User;
+import com.thombs.ChessWeb.Models.User.UserValidator;
 
 
 

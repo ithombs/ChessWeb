@@ -1,4 +1,4 @@
-package com.thombs.ChessWeb.Models;
+package com.thombs.ChessWeb.Models.Chess;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,12 +24,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 
-import com.thombs.ChessWeb.DataAccess.ChessGameService;
-import com.thombs.ChessWeb.DataAccess.UserService;
-import com.thombs.ChessWeb.Models.ChessAI;
-import com.thombs.ChessWeb.Models.ChessBoard;
-import com.thombs.ChessWeb.Models.Side;
-import com.thombs.ChessWeb.Models.ChessPiece;
+import com.thombs.ChessWeb.DataAccess.Chess.ChessGameService;
+import com.thombs.ChessWeb.DataAccess.User.UserService;
+import com.thombs.ChessWeb.Models.Chess.ChessAI;
+import com.thombs.ChessWeb.Models.Chess.ChessBoard;
+import com.thombs.ChessWeb.Models.Chess.Side;
+import com.thombs.ChessWeb.Models.User.User;
 
 
 @Configuration

@@ -1,12 +1,12 @@
-package com.thombs.ChessWeb.DataAccess;
+package com.thombs.ChessWeb.DataAccess.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thombs.ChessWeb.Models.ChessUser;
-import com.thombs.ChessWeb.Models.User;
+import com.thombs.ChessWeb.Models.User.ChessUser;
+import com.thombs.ChessWeb.Models.User.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

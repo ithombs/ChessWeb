@@ -1,8 +1,8 @@
-package com.thombs.ChessWeb.DataAccess;
+package com.thombs.ChessWeb.DataAccess.User;
 
 import java.util.List;
 
-import com.thombs.ChessWeb.Models.User;
+import com.thombs.ChessWeb.Models.User.User;
 
 
 public interface UserService {

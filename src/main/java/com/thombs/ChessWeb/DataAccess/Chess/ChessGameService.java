@@ -1,9 +1,9 @@
-package com.thombs.ChessWeb.DataAccess;
+package com.thombs.ChessWeb.DataAccess.Chess;
 
 import java.util.List;
 
-import com.thombs.ChessWeb.Models.ChessGame;
 import com.thombs.ChessWeb.Models.Leaderboard;
+import com.thombs.ChessWeb.Models.Chess.ChessGame;
 
 public interface ChessGameService {
 	public ChessGame getChessGameByID(int id);

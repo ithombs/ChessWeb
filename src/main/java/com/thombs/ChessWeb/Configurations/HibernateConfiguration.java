@@ -18,7 +18,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.thombs.ChessWeb.Models.ChessMatchmaking;
+import com.thombs.ChessWeb.Models.Chess.ChessMatchmaking;
 
 
 @Configuration

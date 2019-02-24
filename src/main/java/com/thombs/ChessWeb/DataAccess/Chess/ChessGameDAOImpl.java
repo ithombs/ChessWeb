@@ -1,4 +1,4 @@
-package com.thombs.ChessWeb.DataAccess;
+package com.thombs.ChessWeb.DataAccess.Chess;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.thombs.ChessWeb.Models.ChessGame;
 import com.thombs.ChessWeb.Models.Leaderboard;
+import com.thombs.ChessWeb.Models.Chess.ChessGame;
 
 @Repository
 public class ChessGameDAOImpl implements ChessGameDAO{

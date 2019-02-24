@@ -12,11 +12,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.thombs.ChessWeb.Models.ChessAI;
-import com.thombs.ChessWeb.Models.ChessBoard;
-import com.thombs.ChessWeb.Models.ChessMatchmaking;
-import com.thombs.ChessWeb.Models.ChessPiece;
-import com.thombs.ChessWeb.Models.Side;
+import com.thombs.ChessWeb.Models.Chess.ChessAI;
+import com.thombs.ChessWeb.Models.Chess.ChessBoard;
+import com.thombs.ChessWeb.Models.Chess.ChessMatchmaking;
+import com.thombs.ChessWeb.Models.Chess.ChessPiece;
+import com.thombs.ChessWeb.Models.Chess.Side;
 
 @Controller
 public class ChessController {

@@ -1,4 +1,4 @@
-package com.thombs.ChessWeb.Models;
+package com.thombs.ChessWeb.Models.Chess;
 
 import java.util.ArrayList;
 import java.util.Collections;
