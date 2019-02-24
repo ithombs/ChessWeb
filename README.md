@@ -19,8 +19,10 @@ This project is mostly a sandbox for prototyping, sketching out, and implementin
 
 
 
-##IMPORTANT NOTE##
+### IMPORTANT NOTE
 The application.properties file is ommitted from the repository on purpose. In order to fully run the application, besides requiring other pieces such as a database and RabbitMQ, you need to create and fill out an application.properties file with the following keys.
+
+
 
 
 jdbc.driverClassName=
@@ -40,6 +42,7 @@ hibernate.format_sql=
 hibernate.c3p0.min_size=
 
 hibernate.c3p0.max_size= 
+
 hibernate.c3p0.timeout=
 
 hibernate.c3p0.max_statements=
@@ -51,5 +54,3 @@ rabbitmq.password=
 rabbitmq.host=
 
 rabbitmq.port=
-
- 
