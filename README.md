@@ -5,15 +5,15 @@ This project is mostly a sandbox for prototyping, sketching out, and implementin
 
 1. Basic usage of Spring functionality
 
-..*Login security..
+..* Login security..
 
-..*User management..
+..* User management..
 
-..*Web socket usage..
+..* Web socket usage..
 
-..*CRUD functionality via JPA and Hibernate..
+..* CRUD functionality via JPA and Hibernate..
 
-..*Aspect oriented programming..
+..* Aspect oriented programming..
 
 -Simple AI
 --Min-Max algorithm based AI as chess opponent
