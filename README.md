@@ -3,12 +3,17 @@ Version 1.1 of ChessWeb. This time using Hibernate and other useful Spring tools
 
 This project is mostly a sandbox for prototyping, sketching out, and implementing various pieces of functionality that I come across that interest me. Points of interest within the project are as follows:
 
--Basic usage of Spring functionality
---Login security
---User management
---Web socket usage
---CRUD functionality via JPA and Hibernate
---Aspect oriented programming
+1. Basic usage of Spring functionality
+
+..*Login security..
+
+..*User management..
+
+..*Web socket usage..
+
+..*CRUD functionality via JPA and Hibernate..
+
+..*Aspect oriented programming..
 
 -Simple AI
 --Min-Max algorithm based AI as chess opponent
