@@ -44,7 +44,6 @@ public class ChessController {
 			username = user.getName();
 		}else{
 			username = headerAccessor.getSessionId();
-			//username = headerAccessor.getSubscriptionId();
 		}
 		simp.convertAndSendToUser(username, "/queue/privMsg", "{msg: Private message from the server!}");
 	}
@@ -53,16 +52,11 @@ public class ChessController {
 	public void recievePong(SimpMessageHeaderAccessor headerAccessor){
 		Principal user = headerAccessor.getUser();
 		chessMM.recievePong(user.getName());
-		//logger.info("Recieved ChessPong from [" + user.getName() +"]");
 	}
 	
 	@MessageMapping("/chessMsg")
 	public void chessMove(SimpMessageHeaderAccessor headerAccessor, String jsonMsg){
 		Principal user = headerAccessor.getUser();
-		//JSONObject json = new JSONObject();
-		//json.put("chessCommand", "gameStart");
-		//json.put("opponent", "dummyUser1");
-		//json.put("side", "White");
 		
 		JSONObject recievedJSON = new JSONObject(jsonMsg);
 		String commandType = recievedJSON.getString("chessCommand");
@@ -76,7 +70,6 @@ public class ChessController {
 				}
 				break;
 			case "move":
-				//logger.info("ChessCommand [move] recieved from " + user.getName() + ": " + jsonMsg);
 				chessMM.makeMove(user.getName(), jsonMsg);
 				break;
 			case "reconnect":
@@ -90,9 +83,6 @@ public class ChessController {
 			default:
 				logger.info("Unknown ChessCommand recieved from " + user.getName() + ": " + jsonMsg);
 		}
-		
-		//logger.info(jsonMsg);
-		//simp.convertAndSendToUser(user.getName(), "/queue/chessMsg", json.toString());
 	}
 	
 	@MessageMapping("/testAI")
