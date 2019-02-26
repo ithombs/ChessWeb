@@ -17,6 +17,10 @@ import com.thombs.ChessWeb.Models.Chess.ChessBoard;
 import com.thombs.ChessWeb.Models.Chess.ChessMatchmaking;
 import com.thombs.ChessWeb.Models.Chess.ChessPiece;
 import com.thombs.ChessWeb.Models.Chess.Side;
+import com.thombs.ChessWeb.Models.Chess.Json.ChessCommand;
+import com.thombs.ChessWeb.Models.Chess.Json.ChessEnterQueueMessage;
+import com.thombs.ChessWeb.Models.Chess.Json.ChessMoveMessage;
+import com.thombs.ChessWeb.Models.Chess.Json.ChessSimpleMessage;
 
 @Controller
 public class ChessController {
@@ -61,27 +65,55 @@ public class ChessController {
 		JSONObject recievedJSON = new JSONObject(jsonMsg);
 		String commandType = recievedJSON.getString("chessCommand");
 		switch(commandType){
-			case "enterQueue":
-				logger.info("ChessCommand [enterQueue] recieved from " + user.getName() + ": " + jsonMsg);
-				if(recievedJSON.getString("type").equals("human")){
-					chessMM.addPlayerToPool(user.getName());
-				}else if(recievedJSON.getString("type").equals("AI")){
-					chessMM.createAiGame(user.getName(), recievedJSON.getInt("level"));
-				}
-				break;
-			case "move":
-				chessMM.makeMove(user.getName(), jsonMsg);
-				break;
-			case "reconnect":
-				logger.info("ChessCommand [reconnect] recieved from " + user.getName() + ": " + jsonMsg);
-				chessMM.playerReconnected(user.getName());
-				break;
-			case "concede":
-				logger.info("ChessCommand [concede] recieved from " + user.getName() + ": " + jsonMsg);
-				chessMM.concede(user.getName());
-				break;
 			default:
 				logger.info("Unknown ChessCommand recieved from " + user.getName() + ": " + jsonMsg);
+		}
+	}
+	
+	@MessageMapping("/chessMsg-concede")
+	public void concede(SimpMessageHeaderAccessor headerAccessor, ChessSimpleMessage msg){
+		Principal user = headerAccessor.getUser();
+		if(user != null) {
+			logger.info("ChessCommand [concede] recieved from " + user.getName() + ": " + msg);
+			chessMM.concede(user.getName());
+		}else {
+			logger.error("No user found!");
+		}
+	}
+	
+	@MessageMapping("/chessMsg-reconnect")
+	public void reconnect(SimpMessageHeaderAccessor headerAccessor, ChessSimpleMessage msg){
+		Principal user = headerAccessor.getUser();
+		if(user != null) {
+			logger.info("ChessCommand [reconnect] recieved from " + user.getName() + ": " + msg);
+			chessMM.playerReconnected(user.getName());
+		}else {
+			logger.error("No user found!");
+		}
+	}
+	
+	@MessageMapping("/chessMsg-enterQueue")
+	public void enterQueue(SimpMessageHeaderAccessor headerAccessor, ChessEnterQueueMessage msg){
+		Principal user = headerAccessor.getUser();
+		if(user != null) {
+			logger.info("ChessCommand [enterQueue] recieved from " + user.getName() + ": " + msg);
+			if(msg.getType() == 0){
+				chessMM.addPlayerToPool(user.getName());
+			}else if(msg.getType() == 1){
+				chessMM.createAiGame(user.getName(), msg.getLevel());
+			}
+		}else {
+			logger.error("No user found!");
+		}
+	}
+	
+	@MessageMapping("/chessMsg-move")
+	public void chessMove(SimpMessageHeaderAccessor headerAccessor, ChessMoveMessage msg){
+		Principal user = headerAccessor.getUser();
+		if(user != null) {
+			chessMM.makeMove(user.getName(), msg);	
+		}else {
+			logger.error("No user found!");
 		}
 	}
 	
@@ -133,4 +165,9 @@ public class ChessController {
 		ChessAI ai = new ChessAI(testBoard.getAiLevel(), testBoard, simp, "it12", chessMM);
 		ai.makeMove();
 	}
+	
+	public static final String STOMP_MOVE = "/queue/chessMsg-move";
+	public static final String STOMP_GAME_START = "/queue/chessMsg-gameStart";
+	public static final String STOMP_GAME_OVER = "/queue/chessMsg-gameOver";
+	public static final String STOMP_RECONNECT = "/queue/chessMsg-reconnect";
 }

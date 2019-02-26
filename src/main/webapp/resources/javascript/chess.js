@@ -21,97 +21,20 @@ var side;
 var color = true;
 var isMuted = false;
 
-var stompClient;
-function initStompChannels(){
-	var socket = new SockJS('/ChessWeb/chessEndpoint');
-	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function(frame){
-		stompClient.subscribe('/topic/msg', function (msg) {
-	        alert(msg);
-	    });
-		
-		stompClient.subscribe('/user/queue/chessMsg', function (msg) {
-	        msg = JSON.parse(msg.body);
-	        if(msg.chessCommand == "gameStart"){
-	        	startGame(msg);
-	        }else if(msg.chessCommand == "move"){
-	        	if(msg.error != null){
-	        		movePiece(msg.pieceID, msg.row + "|" + msg.col, false);
-	        	}else{
-	        		movePiece(msg.pieceID, msg.row + "|" + msg.col, true);
-	        		if(msg.ml1 != null){
-	        			tileFrom = document.getElementById(msg.ml1).title;
-		        		tileTo = document.getElementById(msg.ml2).title;
-		        		if(color == true)
-			        		document.getElementById("moveList").innerHTML += "<span class='whiteMove'>" + tileFrom + " - " + tileTo + "</span><br>";
-			        	else
-			        		document.getElementById("moveList").innerHTML += "<span class='blackMove'>" + tileFrom + " - " + tileTo + "</span><br>";
-			        	color = !color;
-	        		}
-	        	}
-	        }else if(msg.chessCommand == "gameOver"){
-	        	console.log(msg.winner + " has won the game!")
-	        	document.getElementById("title").innerHTML = msg.winner + " has won the game!";
-	        	document.getElementById("queueBtn").disabled = false;
-	        }else if(msg.chessCommand == "gameReconnect"){
-	        	var blackKing = document.getElementById("4");
-	        	if(blackKing == null){
-	        		initPieces();
-	        	}
-	        	document.getElementById("title").innerHTML = "Opponent: " + msg.opponent;
-	        	document.getElementById("side").innerHTML = "You are " + msg.side;
-	        	
-	        	for(var i = 0; i < msg.numMoves; i++){
-	        		var move = "move_" + i;
-	        		tileFrom = document.getElementById(msg[move].id).parentElement.title;
-	        		movePiece(msg[move].id, msg[move].row + "|" + msg[move].col, true);
-	        		tileTo = document.getElementById(msg[move].id).parentElement.title;
-	        		
-	        		if(color == true)
-		        		document.getElementById("moveList").innerHTML += "<span class='whiteMove'>" + tileFrom + " - " + tileTo + "</span><br>";
-		        	else
-		        		document.getElementById("moveList").innerHTML += "<span class='blackMove'>" + tileFrom + " - " + tileTo + "</span><br>";
-		        	color = !color;
-	        	}
-	        }
-	    });
-		
-		//For Chess AI matches
-		stompClient.subscribe('/user/queue/chessPing', function (msg) {
-			console.log(msg);
-	        stompClient.send("/chess/chessPong", {}, "{pong:'pong'}");
-	    });
-		
-		checkGameStatus();
-	}, function(errorMessage){
-		if(errorMessage.indexOf("Whoops!") !== -1){
-			console.log("Attempting to reconnect...");
-			setTimeout(connect, 3000);
-		}
-	});
-}
+var chessStompClient;
 
-function startGame(msgBody){
-	clearInterval(timerVar);
-	document.getElementById("title").innerHTML = "Opponent: " + msgBody.opponent;
-	document.getElementById("side").innerHTML = "You are " + msgBody.side;
-	
-	chessGameStarted();
-	initPieces();
-}
+
+
+
 
 function enterQueue(type, level){
-	var json = new Object();
-	json.chessCommand = "enterQueue";
-	json.type = type;
-	json.level = level;
-	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json));
+	chessStompClient.enterQueue(type, level);
 }
 
 function connect() {
-	
-	initStompChannels();
-	
+	//initStompChannels();
+	chessStompClient = new ChessStompSocket();
+	chessStompClient.initStompConnection();
 }
 //an opponent was found and a game started
 function chessGameStarted()
@@ -153,12 +76,15 @@ function movePiece(piece, tile, goodMove)
 	else
 	{
 		t.appendChild(p);
-	}	
+	}
+	
+	
 	
 	checkPawnPromotion(p);
 	
 	//soundMove();
 }
+
 function checkPawnPromotion(piece)
 {
 	var tile;
@@ -234,7 +160,7 @@ function drop(ev) {
     }
 
     //check if the ID of the element is a number (the IDs of the tiles are not truly numbers due to use of the pipe character)
-    sendMove();
+    chessStompClient.sendMove();
 }
 
 function createBoard()
@@ -567,9 +493,7 @@ function removePieces()
 
 function concede(player)
 {
-	var json = new Object();
-	json.chessCommand = "concede";
-	stompClient.send("/chess/chessMsg", {}, JSON.stringify(json));
+	chessStompClient.concede();
 }
 
 /*
@@ -746,7 +670,7 @@ function mute()
 }
 
 
-
+/*
 function stompWebSockets(){
 	var socket = new SockJS('/ChessWeb/chessEndpoint');
 	stompClient = Stomp.over(socket);
@@ -768,7 +692,7 @@ function stompWebSockets(){
 		checkGameStatus();
 	});
 }
-
+*/
 //Check if a game was in progress and reconnect to it if there was
 function checkGameStatus(){
 	var jsonMsg = new Object();

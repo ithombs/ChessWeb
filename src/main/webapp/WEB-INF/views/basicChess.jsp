@@ -6,6 +6,8 @@
 <head>
 
 <link href="<c:url value="/resources/theme/styles.css" />" rel="stylesheet">
+<script type="text/javascript" src="<c:url value="/resources/javascript/ChessMessage.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/javascript/ChessStompSocket.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/javascript/chess.js" />"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.1/sockjs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
@@ -55,11 +57,11 @@
 		<option value="3">Level 3</option>
 	</select>
 
-	<button type="button" id="queueBtn" onClick="enterQueue('human', 0)">Enter Queue</button>
+	<button type="button" id="queueBtn" onClick="enterQueue(0, 0)">Enter Queue</button>
 	<br/>	
 	
 	<button type="button" id="concedeBtn" onClick=concede()>Concede</button>
-	<button type="button" id="playAI" onClick="enterQueue('AI',compLevels.value)">Play</button>
+	<button type="button" id="playAI" onClick="enterQueue(1,compLevels.value)">Play</button>
 </div>
 
 

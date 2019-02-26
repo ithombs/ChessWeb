@@ -2,7 +2,9 @@ package com.thombs.ChessWeb.Models.Chess;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +25,7 @@ public class ChessAI implements Runnable{
 	private static final Logger log = LoggerFactory.getLogger(ChessAI.class);
 	
 	private ChessMatchmaking chessMM;
+	private Map<String, Object> header;
 	
 	public ChessAI(int diff, ChessBoard b, SimpMessagingTemplate msgTemplate, String username, ChessMatchmaking chessMM)
 	{
@@ -31,6 +34,9 @@ public class ChessAI implements Runnable{
 		this.msgTemplate = msgTemplate;
 		this.username = username;
 		this.chessMM = chessMM;
+		
+		header = new HashMap<String, Object>();
+		header.put("auto-delete", true);
 	}
 	
 	public void makeMove(){
@@ -97,19 +103,19 @@ public class ChessAI implements Runnable{
 		try
 		{
 			JSONObject json = new JSONObject();
-			json.put("chessCommand", "move");
+			json.put("chessCommand", "MOVE");
 			json.put("pieceID", aiMove.getID());
 			json.put("row", aiMove.getRow());
 			json.put("col", aiMove.getCol());
 			json.put("ml1", prevR + "|" + prevC);
 			json.put("ml2", aiMove.getRow() + "|" + aiMove.getCol());
 			
-			msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", json.toString());
+			msgTemplate.convertAndSendToUser(username, "/queue/chessMsg-move", json.toString(),header);
 			if(board.isGameOver()){
 				JSONObject jsonGameOver = new JSONObject();
-				jsonGameOver.put("chessCommand", "gameOver");
+				jsonGameOver.put("chessCommand", "GAME_OVER");
 				jsonGameOver.put("winner", "AI");
-				msgTemplate.convertAndSendToUser(username, "/queue/chessMsg", jsonGameOver.toString());
+				msgTemplate.convertAndSendToUser(username, "/queue/chessMsg-gameOver", jsonGameOver.toString(),header);
 				
 				board.setWinner("AI");
 				chessMM.saveChessGame(board);
