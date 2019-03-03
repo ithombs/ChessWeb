@@ -123,10 +123,10 @@ public class ChessAI implements Runnable{
 		}
 		catch(Exception e)
 		{
-			System.err.println("ChessAI - run: " + e.getMessage());
+			log.error("ChessAI - run: " + e.getMessage());
 			e.printStackTrace();
 			if(board.isGameOver())
-				System.out.println("AI move failed due to game being over.");
+				log.info("AI move failed due to game being over.");
 		}
 	}
 	
