@@ -1,7 +1,7 @@
 # ChessWeb
 Version 1.1 of ChessWeb. This time using Hibernate and other useful Spring tools.
 
-This project is mostly a sandbox for prototyping, sketching out, and implementing various pieces of functionality that I come across that interest me. Points of interest within the project are as follows:
+This project is mostly a sandbox for prototyping, sketching out, and implementing various pieces of functionality that might interest me. Points of interest within the project are as follows:
 
 * Basic usage of Spring functionality
    * Login security
